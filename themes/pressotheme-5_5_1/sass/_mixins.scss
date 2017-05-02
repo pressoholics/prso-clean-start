@@ -1,0 +1,79 @@
+/* Custom Sass Mixins */
+
+// Helper to strip units from a var -- (24px == 24)
+@function strip-units($number) {
+  @return $number / ($number * 0 + 1);
+}
+
+/* Convert PX units to REMs and add px fallback of property.
+Ex: @include rem(line-height, 25px);
+*/
+@mixin rem($property, $pxval, $base: $rem-base) {
+	#{$property}: #{$pxval};
+	#{$property}: rem-calc($pxval);
+}
+
+/* Helper to add propoerty across browser vendors */
+@mixin vendorize($property, $value) {
+	-webkit-#{$property}: $value;
+	-moz-#{$property}: $value;
+	-ms-#{$property}: $value;
+	-o-#{$property}: $value;
+	#{$property}: $value;
+}
+
+/* Helper to style all Link Hover/Active/Focus */
+@mixin hoverActiveFocus($property, $value) {
+    &:hover, &:active, &:focus {
+        #{$property}: $value;
+    }
+}
+
+/* Helper to return css required for left overlap browser bars */
+@mixin leftBrowserBar() {
+	bottom: 0;
+	content: "";
+	position: absolute;
+	top: 0;
+	width: 9999px;
+	right: 100%;
+}
+
+/* Default sprite locations -- !!HEY!! Uncomment me when you are ready to use some sprites :) */
+//$sprites 	: sprite-map("sprites_72/*.png");
+
+
+/* E.G. @include get-sprite( "nav-tab", $sprites ); */
+@mixin get-sprite($name, $sprites) {
+	background-image: sprite-url($sprites);
+	background-position: sprite-position($sprites, $name);
+	background-repeat: no-repeat;
+}
+
+/* Comment out and use other mixin below to compile final css with retina */
+$sprites2x	: "";
+@mixin get-retina-sprites($name, $sprites, $sprites2x) {
+	background-image: sprite-url($sprites);
+	background-position: sprite-position($sprites, $name);
+	background-repeat: no-repeat;
+}
+
+
+/* E.G. @include get-retina-sprites( "nav-tab", $sprites, $sprites2x ); */
+/*
+$sprites2x	: sprite-map("sprites_192/*.png");
+@import "compass/css3/background-size";
+@mixin get-retina-sprites($name, $sprites, $sprites2x) {
+  background-image: sprite-url($sprites);
+  background-position: sprite-position($sprites, $name);
+  background-repeat: no-repeat;
+  @media (-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (min-device-pixel-ratio: 1.5) {
+    & {
+      $pos: sprite-position($sprites2x, $name);
+      background-image: sprite-url($sprites2x);
+      background-position: nth($pos, 1) nth($pos, 2) / 2;
+      @include background-size(ceil(image-width(sprite-path($sprites2x)) / 2) auto);
+    }
+  }
+}
+*/

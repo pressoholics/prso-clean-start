@@ -1,0 +1,15 @@
+/** Vertically Center Content in a Div **/
+.vcenter-outer {
+	display: table;
+	height: 100%;
+	overflow: hidden;
+	width: 100%;
+}
+
+.vcenter-inner {
+	display: table-cell;
+	vertical-align: middle;
+	width: 100%;
+	margin: 0 auto;
+	text-align: center;
+}

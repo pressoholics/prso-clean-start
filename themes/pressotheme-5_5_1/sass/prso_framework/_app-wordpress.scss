@@ -1,0 +1,441 @@
+/**
+* app-wordpress.css
+* 
+* Adds wordpress specific styles to the theme,
+* Override these in app.css if need be.
+* 
+* @author	Ben Moody
+*/
+
+//Make fontss look nice
+h1, h2, h3, h4, h5, h6, p, a {
+	@include vendorize( font-smoothing, antialiased );
+}
+
+/* layout */
+
+.more-link{
+	white-space: nowrap;
+}
+
+p.attribution{
+	text-align: right;
+}
+
+article.post{
+	margin-bottom: 18px;
+	border-bottom: 1px solid #E6E6E6;
+}
+
+header .menu-action {
+    float: left;
+    margin-top: 0;
+    position: relative;
+    top: 1px;
+}
+
+header .menu-action .button.small {
+    padding: 8px;
+}
+
+header .menu-action .button.small svg {
+    opacity: 0.5;
+}
+
+/* Mobile off canvas Navigation */
+body {
+   /*Causes problem with Backstrectch jquery plugin -webkit-transform: translate3d(0, 0, 0); */
+   top: 0;
+   left: 0;
+}
+
+ul li.nav-search {
+	float: right;
+	width: 20%;
+}
+
+ul li.nav-search input {
+	margin: 3px 0;
+}
+
+/* typography */
+
+.siteinfo h1{ font-weight: 800; }
+
+/* post styling */
+
+p.meta{
+	font-style: italic;
+	color: #808080;
+}
+
+div[id*='attachment_']{
+	max-width: 100%;
+	height: 100%;
+}
+
+img {
+	max-width: 100%;
+}
+
+article img{
+	margin-bottom: 18px;
+}
+
+h1.single-title{
+	line-height: 1.1;
+}
+
+.alignleft{
+	margin-right: 10px;
+	float: left;
+}
+
+.alignright{
+	margin-left: 10px;
+	float: right;
+}
+
+.aligncenter{
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+}
+
+p.tags a:hover{
+	color: #f0f0f0;
+}
+
+video {
+	max-width: 100%;
+	height: auto;
+}
+
+.video-container {
+	position: relative;
+	padding-bottom: 56.25%;
+	padding-top: 30px;
+	height: 0;
+	overflow: hidden;
+}
+
+.video-container iframe,  
+.video-container object,  
+.video-container embed {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.video-wrapper {
+	width: 630px;
+	max-width: 100%;
+	margin-bottom: 18px;
+}
+
+pre {
+    background-color: #F5F5F5;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    display: block;
+    font-size: 12px;
+    line-height: 18px;
+    margin: 0 0 18px;
+    padding: 8.5px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+code {
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+}
+
+code, pre {
+    font-family: Monaco,Andale Mono,Courier New,monospace;
+    font-size: 12px;
+	padding: 5px 15px;
+}
+
+/* featured posts slider */
+.orbit-container.orbit { background: none; }
+
+.orbit-container.orbit img, .orbit-container.orbit div { display: block; }
+
+.orbit-container div{
+	padding: 0 15px;
+}
+
+.orbit-container div.flex-video {
+    padding-bottom: 67.5%;
+    padding-top: 25px;
+}
+
+.orbit-container div.flex-video.widescreen {
+    padding-bottom: 57.25%;
+}
+
+.orbit-container h3{
+	
+}
+
+.orbit-container p{
+	
+}
+
+.orbit-container h3,
+.orbit-container p{
+	
+}
+
+.orbit-container .content {
+	background-color: #ffffff;
+	@include vendorize(background-size,cover);
+}
+
+/* page styling */
+
+.page-template-page-homepage-php #main {
+	border-bottom: none;
+}
+
+/* comments */
+
+#comments{
+	line-height: 3.1rem;
+	margin-bottom: 18px;
+}
+
+ol.commentlist,
+ol.commentlist ul.children{
+	list-style-type: none;
+	margin-left: 0;
+}
+
+ol.commentlist div.avatar{
+	float: left;
+	margin-right: 10px;
+}
+
+ol.commentlist time{
+	font-size: .8em;
+	color: #eeeeee;
+}
+
+ol.commentlist div.comment-author{
+	position: relative;
+}
+
+.panel ol.commentlist a.comment-edit-link{
+	color: #ffffff;
+	text-decoration: none;
+}
+
+ol.commentlist span.edit-comment{
+	position: absolute;
+	right: 1.5em;
+	top: 0;
+}
+
+.comment h4{
+	margin-bottom: 0;
+}
+
+a.comment-reply-link{
+	position: absolute;
+	right: 1.5em;
+	bottom: 0;
+}
+
+#cancel-comment-reply{
+	padding-left: 20px;
+}
+
+#comment-nav ul{
+	list-style-type: none;
+	margin: 0;
+}
+
+#comment-form-elements{
+	list-style-type: none;
+	margin: 0;
+}
+
+.comment-author {
+	width: 100%;
+}
+
+/* specific post-type styles */
+
+/* image attachment */
+
+.attachment #main .post_content img{
+	max-width: 100%;
+}
+
+li.next{
+	text-align: right;
+}
+
+#sidebar1 .metadata,
+#sidebar1 .caption{
+	padding-bottom: 20px;
+}
+
+/* images */
+img {
+	&.size-thumbnail {
+		max-width: 150px;
+	}
+	&.size-medium {
+		max-width: 125px;
+	}
+	&.size-large {
+		max-width: 1024px;
+	}
+}
+
+/* widget styles */
+
+.widget{
+	margin-bottom: 18px;
+}
+
+.widget li{
+	margin-bottom: 2px;
+	list-style: none;
+}
+
+.widget ul.children{
+	margin-bottom: 0;
+}
+
+.widget ul.children li{
+	margin-left: 9px;
+}
+
+#tag-cloud{
+	margin-bottom: 18px;
+	margin-top: 5px;
+}
+
+a[class^='tag-link-']:hover{
+	color: #f0f0f0;
+}
+
+/* archives dropdown widget */
+.widget_archive select {
+	margin-top: 6px;
+}
+
+/* calendar widget */
+.widget_calendar {}
+#wp-calendar {width: 100%; }
+#wp-calendar caption { text-align: right; color: #333; font-size: 12px; margin-top: 10px; margin-bottom: 15px; }
+#wp-calendar thead { font-size: 1.0rem; font-size: 10px; }
+#wp-calendar thead th { padding-bottom: 10px; }
+#wp-calendar tbody { color: #aaa; }
+#wp-calendar tbody td { background: #f5f5f5; border: 1px solid #fff; text-align: center; padding:6px;}
+#wp-calendar tbody td:hover { background: #fff; }
+#wp-calendar tbody .pad { background: none; }
+#wp-calendar tfoot #next { font-size: 1.0rem; font-size: 10px; text-transform: uppercase; text-align: right; }
+#wp-calendar tfoot #prev { font-size: 1.0rem; font-size: 10px; text-transform: uppercase; padding-top: 10px; }
+
+
+
+
+/* Small Device Styles Here */
+@media only screen and (max-width: 768px) {
+	
+	/* widget styles */
+	ul.children {
+		display: none;
+	}
+	
+	.widget li a{
+		display: block;
+		color: #ffffff;
+		text-align: center;
+		border-radius: 3px 3px 3px 3px;
+		padding: 5px;
+		background: none repeat scroll 0 0 #2BA6CB;
+	}
+	
+	.widget li .prso-post-count {
+		display: none;
+	}
+
+	.widget_archive ul {
+		margin-top: 6px;
+	}
+	
+	.widget_archive > aside > ul > li,
+	.widget_categories > aside > ul > li {
+		height: 35px;
+	}
+	
+	.widget_nav_menu {
+		display: none;
+	}
+	
+	#tag-cloud > p > a.label {
+		line-height: 2;
+	}
+	
+}
+
+/* Medium screens */
+@media only screen and (max-width: 1279px) and (min-width: 768px) {
+	
+
+	
+}
+
+/* Medium Screens AND Landscape - iPad */
+@media only screen and (max-width: 1279px) and (min-width: 768px) and (orientation: landscape) {
+
+	
+}
+
+/* Medium Screens AND Portrait - iPad */
+@media only screen and (max-width: 1279px) and (min-width: 768px) and (orientation: portrait) {
+	
+	.widget_calendar > aside {
+		display: none;
+	}
+		
+}
+
+@media only screen and (min-width: 768px) {
+	ol.commentlist div.avatar{
+		margin-right: 0;
+	}
+	
+	#main{
+		border-bottom: none;
+	}
+
+	#featured h3{
+		
+	}
+
+	#featured p{
+		
+	}
+
+	#featured h3,
+	#featured p{
+		
+	}
+	
+}
+
+@media only screen and (min-width: 940px) {
+	/* desktop specific styles */
+	
+	ol.commentlist div.avatar{
+		margin-right: 0;
+	}
+	
+}
