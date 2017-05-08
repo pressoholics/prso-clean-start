@@ -11,7 +11,7 @@
 *
 */
 
-add_action( 'wp_enqueue_scripts', 'prso_init_wp_api' );
+//add_action( 'wp_enqueue_scripts', 'prso_init_wp_api' );
 function prso_init_wp_api() {
 	
 	//Backbone
@@ -22,20 +22,6 @@ function prso_init_wp_api() {
 	
 	//WP API - loads all dependents
 	wp_enqueue_script( 'wp-api' );
-	
-}
-
-add_filter( 'rest_url_prefix', 'prso_wp_api_prefix' );
-function prso_wp_api_prefix() {
-	
-	return 'wp-json/wp/v2';
-	
-}
-
-add_filter( 'rest_url', 'prso_wp_api_rest_url', 10, 4 );
-function prso_wp_api_rest_url( $url, $path, $blog_id, $scheme ) {
-	
-	return rtrim( $url, '/' );
 	
 }
 
@@ -64,6 +50,38 @@ function prso_custom_login_view() { ?>
 <?php }
 //add_action( 'login_enqueue_scripts', 'prso_custom_login_view' );
 
+/******************************************************************
+ *    Theme Scripts / Styles
+ *****************************************************************/
+
+/**
+ * prso_child_enqueue_scripts
+ *
+ * @CALLED BY ACTION 'wp_enqueue_scripts'
+ *
+ * Enqueue any theme SCRIPTS here
+ *
+ * @access    public
+ * @author    Ben Moody
+ */
+add_action( 'wp_enqueue_scripts', 'prso_child_enqueue_scripts' );
+function prso_child_enqueue_scripts() {
+
+	if( is_admin() ) {
+		return;
+	}
+
+	/** example
+	wp_enqueue_script('fbm-vendor',
+		get_stylesheet_directory_uri() . '/' . FRONTEND_FOLDER . '/' . SCRIPT_VENDOR_DESKTOP_BUNDLE,
+		array(),
+		$wp_version,
+		true
+	);
+    **/
+
+}
+
 /**
 * prso_theme_localize
 * 
@@ -72,6 +90,7 @@ function prso_custom_login_view() { ?>
 * @access 	public
 * @author	Ben Moody
 */
+//add_action( 'wp_print_scripts', 'prso_theme_localize', 100 );
 function prso_theme_localize() {
 	
 	//Init vars
@@ -91,13 +110,20 @@ function prso_theme_localize() {
 	wp_localize_script( $handle, $obj_name, $data_array );
 	
 }
-//add_action( 'wp_print_scripts', 'prso_theme_localize', 100 );
 
-add_filter( 'prso_gform_pluploader_entry_attachment_links', 'download_entry_attachments', 10, 3 );
-function download_entry_attachments( $attachment_url, $file_id, $post ) {
+/**
+ * prso_tiny_mce_editor_styles
+ *
+ * @CALLED BY ACTION 'init'
+ *
+ * Enqueue custom visual editor stylesheet
+ *
+ * @access 	public
+ * @author	Ben Moody
+ */
+add_action( 'init', 'prso_tiny_mce_editor_styles', 10 );
+function prso_tiny_mce_editor_styles() {
 
-	//Get url to attachment
-	$attachment_url = wp_get_attachment_url( $file_id );
-	
-	return $attachment_url;
+	add_editor_style();
+
 }

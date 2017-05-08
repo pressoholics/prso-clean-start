@@ -1,0 +1,20 @@
+// Global Foundation Settings
+@import "settings";
+@import "foundation";
+
+// Or selectively include components
+@import
+"foundation/components/type";
+
+// Pressoholics Framework Core
+@import "_mixins.scss";
+
+// Theme specific sass
+@import "theme_styles/_typography.scss";
+
+/* Editor specific styles
+---------------------------------------------------------------------- */
+body {
+  margin: 9px 10px;
+  max-width: 100%;
+}
