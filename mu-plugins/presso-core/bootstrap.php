@@ -124,6 +124,8 @@
  		
  		$result = array(
 		    'custom-posts',
+		    'shortcake',
+		    'tinymce'
 		);
  		
  		return $result;
