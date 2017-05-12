@@ -6,8 +6,8 @@
  *
  * PHP versions 4 and 5
  *
- * @copyright     Pressoholics (http://pressoholics.com)
- * @link          http://pressoholics.com
+ * @copyright     Pressoholics (//pressoholics.com)
+ * @link          //pressoholics.com
  * @package       pressoholics theme framework
  * @since         Pressoholics v 0.1
  */
@@ -250,8 +250,8 @@ class PrsoThemeConfig {
 	* 
 	* The url for Google jQuery library, used in front end only
 	*/
-	protected $theme_google_jquery_url = 'http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js';
-
+	protected $theme_google_jquery_url      = '//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js';
+	protected $theme_google_jquery_version  = '2.2.4';
  
 /******************************************************************
  * 7. 	Wordpress Dashboard
@@ -450,7 +450,7 @@ class PrsoThemeConfig {
  	*
  	* array(
 			'handle'		=>	'cufon',
-			'script_cdn'	=>	'http://cdnjs.cloudflare.com/ajax/libs/cufon/1.09i/cufon-yui.js',
+			'script_cdn'	=>	'//cdnjs.cloudflare.com/ajax/libs/cufon/1.09i/cufon-yui.js',
 			'script'		=>	get_template_directory_uri() . '/javascripts/cufon-yui.js',
 			'version'		=>	'1.09i'
 		);
@@ -470,7 +470,7 @@ class PrsoThemeConfig {
  	*
  	* array(
 			'handle'		=>	'backstretch',
-			'script_cdn'	=>	'http://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.3/jquery.backstretch.min.js ',
+			'script_cdn'	=>	'//cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.3/jquery.backstretch.min.js ',
 			'script'		=>	get_template_directory_uri() . '/javascripts/jquery/jquery.backstretch.min.js',
 			'version'		=>	'2.0.3'
 		);
@@ -490,7 +490,7 @@ class PrsoThemeConfig {
  	*
  	* array(
 			'handle'		=>	'jquery-waypoints',
-			'script_cdn'	=>	'http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.2/waypoints.min.js',
+			'script_cdn'	=>	'//cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.2/waypoints.min.js',
 			'script'		=>	get_template_directory_uri() . '/javascripts/jquery/jquery.waypoints.min.js',
 			'version'		=>	'2.0.2'
 		);

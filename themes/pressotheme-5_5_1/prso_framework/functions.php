@@ -108,7 +108,7 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
  		//Register Prso Theme sidebars
  		add_action( 'widgets_init', array($this, 'register_sidebars') );
  		
- 		//Remove <p> tag from around imgs (http://css-tricks.com/snippets/wordpress/remove-paragraph-tags-from-around-images/)
+ 		//Remove <p> tag from around imgs (//css-tricks.com/snippets/wordpress/remove-paragraph-tags-from-around-images/)
  		add_filter( 'the_content', array($this, 'remove_p_tag_from_images'), 100 );
  		add_filter( 'widget_text', array($this, 'remove_p_tag_from_images'), 100 );
  		
@@ -717,7 +717,7 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
  	
  		if( isset($this->theme_google_jquery_url) ) {
  			wp_deregister_script( 'jquery' ); // deregisters the default WordPress jQuery  
-        	wp_register_script('jquery', $this->theme_google_jquery_url, NULL, '1.10.1'); // register the external file  
+        	wp_register_script('jquery', $this->theme_google_jquery_url, NULL, $this->theme_google_jquery_version); // register the external file
         	wp_enqueue_script('jquery'); // enqueue the external file
  		}
  		
@@ -805,7 +805,7 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
 			//RSS thingy
 			add_theme_support( 'automatic-feed-links' );
 			
-			//to add header image support go here: http://themble.com/support/adding-header-background-image-support/
+			//to add header image support go here: //themble.com/support/adding-header-background-image-support/
 			
 			//Post format support
 			add_theme_support( 'post-formats', $post_format_args );	
@@ -1629,7 +1629,7 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
 		
 		$defaults = array(
 			'handle'		=>	'cufon',
-			'script_cdn'	=>	'http://cdnjs.cloudflare.com/ajax/libs/cufon/1.09i/cufon-yui.js',
+			'script_cdn'	=>	'//cdnjs.cloudflare.com/ajax/libs/cufon/1.09i/cufon-yui.js',
 			'script'		=>	get_template_directory_uri() . '/javascripts/cufon-yui.js',
 			'version'		=>	'1.09i'
 		);
@@ -1667,7 +1667,7 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
 	}
 	
 	/**
-	* load_backstretch_script - http://srobbin.com/jquery-plugins/backstretch/
+	* load_backstretch_script - //srobbin.com/jquery-plugins/backstretch/
 	* 
 	* Registers and enqueues Backstretch script. Will try to load the CDN version
 	* if that fails then will try to load the local version.
@@ -1676,13 +1676,13 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
 	*		array to disable backstretch script enqueue
 	*
 	* How to use:
-	*	Basic: $.backstretch("http://dl.dropbox.com/u/515046/www/garfield-interior.jpg");
-	*	Block-level: $("#demo").backstretch("http://dl.dropbox.com/u/515046/www/garfield-interior.jpg");
+	*	Basic: $.backstretch("//dl.dropbox.com/u/515046/www/garfield-interior.jpg");
+	*	Block-level: $("#demo").backstretch("//dl.dropbox.com/u/515046/www/garfield-interior.jpg");
 	*	Slideshow: 
 	*				 $.backstretch([
-						"http://dl.dropbox.com/u/515046/www/outside.jpg"
-						, "http://dl.dropbox.com/u/515046/www/garfield-interior.jpg"
-						, "http://dl.dropbox.com/u/515046/www/cheers.jpg"
+						"//dl.dropbox.com/u/515046/www/outside.jpg"
+						, "//dl.dropbox.com/u/515046/www/garfield-interior.jpg"
+						, "//dl.dropbox.com/u/515046/www/cheers.jpg"
 					], {duration: 3000, fade: 750});
 	*
 	* @access 	private
@@ -1696,7 +1696,7 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
 		
 		$defaults = array(
 			'handle'		=>	'backstretch',
-			'script_cdn'	=>	'http://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.3/jquery.backstretch.min.js ',
+			'script_cdn'	=>	'//cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.3/jquery.backstretch.min.js ',
 			'script'		=>	get_template_directory_uri() . '/javascripts/jquery/jquery.backstretch.min.js',
 			'version'		=>	'2.0.3'
 		);
@@ -1734,7 +1734,7 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
 	}
 	
 	/**
-	* load_waypoints_script - http://imakewebthings.com/jquery-waypoints/
+	* load_waypoints_script - //imakewebthings.com/jquery-waypoints/
 	* 
 	* Registers and enqueues Waypoints script. Will try to load the CDN version
 	* if that fails then will try to load the local version.
@@ -1758,7 +1758,7 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
 		
 		$defaults = array(
 			'handle'		=>	'jquery-waypoints',
-			'script_cdn'	=>	'http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.2/waypoints.min.js',
+			'script_cdn'	=>	'//cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.2/waypoints.min.js',
 			'script'		=>	get_template_directory_uri() . '/javascripts/jquery/jquery.waypoints.min.js',
 			'version'		=>	'2.0.2'
 		);
@@ -1796,7 +1796,7 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
 	}
 	
 	/**
-	* load_skrollr_script - http://prinzhorn.github.io/skrollr/
+	* load_skrollr_script - //prinzhorn.github.io/skrollr/
 	* 
 	* Registers and enqueues skrollr script. Will try to load the CDN version
 	* if that fails then will try to load the local version.
