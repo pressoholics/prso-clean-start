@@ -330,7 +330,9 @@ a[class^='tag-link-']:hover{
 #wp-calendar tfoot #next { font-size: 1.0rem; font-size: 10px; text-transform: uppercase; text-align: right; }
 #wp-calendar tfoot #prev { font-size: 1.0rem; font-size: 10px; text-transform: uppercase; padding-top: 10px; }
 
-
+.recentcomments a {
+	word-break: break-all;
+}
 
 
 /* Small Device Styles Here */
