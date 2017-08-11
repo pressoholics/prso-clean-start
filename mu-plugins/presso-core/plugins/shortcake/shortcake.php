@@ -35,6 +35,7 @@ class PrsoShortcakeShortcodes {
 
 		//Include shortcake shortcode for posts
 		//include_once( "{$cpt_path}/class.shortcake.collections_cta.php" );
+		include_once( "{$cpt_path}/class.shortcake.content_tools.php" );
 
 	}
 
