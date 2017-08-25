@@ -131,3 +131,17 @@ function [REPLACE_NAME]_column_action( $column ) {
 	*/
 	
 }
+
+//Filter rest_prepare_post
+//add_filter( 'rest_prepare_[REPLACE_NAME]', '[REPLACE_NAME]_rest_prepare', 999, 3 );
+function [REPLACE_NAME]_rest_prepare( $response, $post, $request ) {
+
+	//ob_start();
+
+		//get_template_part('/template_parts/part', 'gallery_item');
+
+	//$response->data['html'] = ob_get_contents();
+	//ob_end_clean();
+
+	return $response;
+}
