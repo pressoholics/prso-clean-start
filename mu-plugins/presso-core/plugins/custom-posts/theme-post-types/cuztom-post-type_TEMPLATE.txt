@@ -118,7 +118,7 @@ function [REPLACE_NAME]_columns_filter( $columns ) {
 * @access 	public
 * @author	Ben Moody
 */
-add_action( 'manage_posts_custom_column', '[REPLACE_NAME]_column_action', 10, 1 );
+add_action( 'manage_[REPLACE_NAME]_posts_custom_column', '[REPLACE_NAME]_column_action', 10, 1 );
 function [REPLACE_NAME]_column_action( $column ) {
 
 	global $post;
