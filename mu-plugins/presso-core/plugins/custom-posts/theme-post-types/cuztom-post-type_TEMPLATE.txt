@@ -11,6 +11,21 @@
 * @author	Ben Moody
 */
 
+//Hide front end from users
+//add_action( 'wp', '[REPLACE_NAME]_hide_from_public' );
+function [REPLACE_NAME]_hide_from_public() {
+
+	global $wp_query;
+
+	if( is_singular('[REPLACE_NAME]') ) {
+
+		$wp_query->set_404();
+		status_header(404);
+
+	}
+
+}
+
 /**
 * Add post filters for these taxonomies to admin area
 * 
