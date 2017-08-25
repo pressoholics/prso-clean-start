@@ -98,7 +98,7 @@ function [REPLACE_NAME]_theme_setup() {
 * @access 	public
 * @author	Ben Moody
 */
-add_filter( 'manage_[REPLACE_NAME]_posts_columns', 'dr_team_columns_filter', 10, 1 );
+add_filter( 'manage_[REPLACE_NAME]_posts_columns', '[REPLACE_NAME]_columns_filter', 10, 1 );
 function [REPLACE_NAME]_columns_filter( $columns ) {
 	
 	/*
