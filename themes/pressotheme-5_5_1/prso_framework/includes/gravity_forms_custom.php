@@ -229,7 +229,7 @@ function prso_theme_gform_field_content( $content, $field, $value, $lead_id, $fo
 			
 				$content = str_replace("{FIELD}", prso_theme_gform_get_text_field($field, $value, 0, $form_id), $field_content);
 			
-			} elseif ( ($field['type'] === 'post_custom_field') || ($field['type'] === 'password') || ($field['type'] === 'radio') || ($field['type'] === 'select') ) {
+			} elseif ( ($field['type'] === 'post_custom_field') || ($field['type'] === 'password') || ($field['type'] === 'radio') || ($field['type'] === 'select') || ($field['type'] === 'phone') ) {
 
 				$content = $content;
 			
