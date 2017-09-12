@@ -736,7 +736,7 @@ function prso_theme_gform_get_state_field($field, $id, $field_id, $state_value, 
 		$get_state_dropdown = GFCommon::get_state_dropdown($states, $state_value);
 	} else {
 		$gf_address_field 		= new GF_Field_Address();
-		$get_state_dropdown     = $gf_address_field->get_state_dropdown( $states, $state_value, '' );
+		$get_state_dropdown     = $gf_address_field->get_state_dropdown( $states, $state_value, $state_label );
 	}
     
     $state_dropdown = sprintf("<select name='input_%d.4' %s $tabindex %s $state_dropdown_class $state_style>%s</select>", $id, $state_field_id, $disabled_text, $get_state_dropdown);
