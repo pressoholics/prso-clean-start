@@ -64,6 +64,30 @@
 		</style>
 		<![endif]-->
 		
+		<div id="breakpoints">
+
+            <div class="show-for-small">
+                SMALL
+            </div>
+
+            <div class="show-for-medium">
+                MEDIUM
+            </div>
+
+            <div class="show-for-large">
+                LARGE
+            </div>
+
+            <div class="show-for-xlarge">
+                X-LARGE
+            </div>
+
+            <div class="show-for-xxlarge">
+                XX-LARGE
+            </div>
+
+        </div>
+		
 		<!-- off canvas wrap !-->
 		<div class="off-canvas-wrap" data-offcanvas>
 			<div class="inner-wrap">

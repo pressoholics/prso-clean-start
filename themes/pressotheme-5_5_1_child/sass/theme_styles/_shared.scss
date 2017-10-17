@@ -1,3 +1,15 @@
+/* Dev Tools
+---------------------------------------------------------------------- */
+#breakpoints {
+	position: fixed;
+	bottom:0;
+	right: 0;
+	@include rem(padding, 10px);
+	background-color: black;
+	color: white;
+	z-index: 9999;
+}
+
 /** Vertically Center Content in a Div **/
 .vcenter-outer {
 	display: table;
