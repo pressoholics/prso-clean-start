@@ -82,7 +82,7 @@ $sprites2x	: sprite-map("sprites_192/*.png");
 	@return $value / strip-units($base-font-size)
 }
 
-@mixin cover-background($img-uri, $background-top:"center", $background-left:"center", $background-attachment:"fixed") {
+@mixin cover-background($img-uri, $background-top:"center", $background-left:"center", $background-attachment:"local") {
 	background: url($img-uri) no-repeat unquote($background-top) unquote($background-left) unquote($background-attachment);
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -90,7 +90,7 @@ $sprites2x	: sprite-map("sprites_192/*.png");
 	background-size: cover;
 }
 
-@mixin cover-background-no-url($background-top:"center", $background-left:"center", $background-attachment:"fixed") {
+@mixin cover-background-no-url($background-top:"center", $background-left:"center", $background-attachment:"inherit") {
 	background-repeat: no-repeat;
 	background-position: unquote($background-top) unquote($background-left);
 	background-attachment: unquote($background-attachment);
