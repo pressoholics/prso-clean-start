@@ -11,6 +11,55 @@
 *
 */
 
+/**
+* prso_allow_iframes_filter
+* 
+* @CALLED BY FILTER 'wp_kses_allowed_html'
+*
+* Allow iframe output when using wp_kses_post
+*
+* @access 	public
+* @author	Ben Moody
+*/
+add_filter( 'wp_kses_allowed_html', 'prso_allow_iframes_filter' );
+function prso_allow_iframes_filter( $allowedposttags ) {
+
+	// Allow iframes and the following attributes
+	$allowedposttags['iframe'] = array(
+		'align' => true,
+		'width' => true,
+		'height' => true,
+		'frameborder' => true,
+		'name' => true,
+		'src' => true,
+		'id' => true,
+		'class' => true,
+		'style' => true,
+		'scrolling' => true,
+		'marginwidth' => true,
+		'marginheight' => true,
+	);
+
+	return $allowedposttags;
+}
+
+//Add BugHerd script for admins only
+//add_action( 'wp_footer', 'gcc_enqueue_bugherd_admin' );
+function gcc_enqueue_bugherd_admin() {
+	if( current_user_can('manage_options') ):
+	?>
+	<script type='text/javascript'>
+	(function (d, t) {
+	  var bh = d.createElement(t), s = d.getElementsByTagName(t)[0];
+	  bh.type = 'text/javascript';
+	  bh.src = 'https://www.bugherd.com/sidebarv2.js?apikey=';
+	  s.parentNode.insertBefore(bh, s);
+	  })(document, 'script');
+	</script>
+	<?php
+	endif;
+}
+
 //add_action( 'wp_enqueue_scripts', 'prso_init_wp_api' );
 function prso_init_wp_api() {
 	
