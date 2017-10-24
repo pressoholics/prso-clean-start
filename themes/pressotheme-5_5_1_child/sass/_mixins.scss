@@ -100,6 +100,15 @@ $sprites2x	: sprite-map("sprites_192/*.png");
 	background-size: cover;
 }
 
+@mixin cover-video() {
+	object-fit: cover;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
 @mixin vertical-align($position: relative) {
 	position: $position;
 	top: 50%;
