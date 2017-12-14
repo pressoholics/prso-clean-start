@@ -170,24 +170,8 @@ class PrsoCoreMinifyModel {
 							//Remove script from queue
 							wp_dequeue_script( $script_handle );
 							wp_deregister_script( $script_handle );
-						} else {
-							
-							//Remove script from queue
-							wp_dequeue_script( $script_handle );
-							wp_deregister_script( $script_handle );
-							
-							//Add script to footer
-							wp_register_script( $script_handle, $script_params[$script_handle]->src, $script_params[$script_handle]->deps, $script_params[$script_handle]->ver, true ); 
-							wp_enqueue_script( $script_handle );
-							
 						}
 						
-					} else {
-						//Cache script src url
-						$scripts_src[] = $script_params[$script_handle]->src;
-						
-						//Remove script from queue
-						wp_dequeue_script( $script_handle );
 					}
 					
 				}
