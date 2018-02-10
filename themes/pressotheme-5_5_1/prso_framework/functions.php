@@ -183,7 +183,7 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
  		add_filter( 'the_content', array($this, 'filter_rentina_content_images'), 100, 1 );
  		
  		//Filter oembed and wrap youtube and vimeo videos in flex video wrappers
- 		add_filter( 'oembed_result', array($this, 'oembed_zurb_video_wrapper'), 10, 3 );
+ 		add_filter( 'video_embed_html', array($this, 'oembed_zurb_video_wrapper'), 999, 1 );
  		
  		//Fix chrome admin area bug
  		add_action('admin_enqueue_scripts', array($this, 'chromefix_inline_css') );
@@ -2086,25 +2086,9 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
 	*/
 	public function oembed_zurb_video_wrapper( $html, $url, $args ) {
 		
-		//Init vars
-		$output 			= NULL;
-		$wrapper_start		= NULL;
+		$html = str_replace( 'embed-youtube', 'embed-youtube flex-video widescreen', $html );
 		
-		//Detect if this is vimeo
-		if( strpos($url, 'vimeo') > 0 ) {
-			$wrapper_start = "<div class='flex-video widescreen vimeo'>";
-		} elseif( strpos($url, 'youtube') > 0 ) {
-			$wrapper_start = "<div class='flex-video widescreen'>";
-		}
-		
-		//Wrap embed code
-		if( !empty($wrapper_start) ) {
-			$output = $wrapper_start . $html . '</div>';
-		} else {
-			$output = $html;
-		}
-		
-		return $output;
+		return $html;
 		
 	}
 	
