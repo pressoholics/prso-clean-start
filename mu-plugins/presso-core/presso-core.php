@@ -54,6 +54,72 @@ if( file_exists( dirname(__FILE__) . '/bootstrap.php' ) ) {
 }
 
 /**
+ * prso_include_file
+ *
+ * Helper to test file include validation and include_once if safe
+ *
+ * @param    string    Path to include
+ *
+ * @return    mixed    Bool/WP_Error
+ * @access    public
+ * @author    Ben Moody
+ */
+function prso_include_file( $path ) {
+
+	//Check if a valid path for include
+	if ( validate_file( $path ) > 0 ) {
+
+		//Failed path validation
+		return new WP_Error(
+			'fbbrcpl_include_file',
+			'File include path failed path validation',
+			$path
+		);
+
+	}
+
+	include_once( $path );
+
+	return true;
+}
+
+/**
+ * prso_include_all_files
+ *
+ * Helper to autoload all php files found in the supplied path
+ *
+ * @param string $path_to_files
+ *
+ * @access public
+ * @author Ben Moody
+ */
+function prso_include_all_files( $path_to_files = null ) {
+
+	//vars
+	$pathnames = array();
+
+	if ( empty( $path_to_files ) ) {
+		return;
+	}
+
+	//Get pathnames of files in destination
+	$pathnames = glob( "{$path_to_files}/*.php" );
+
+	if ( false === $pathnames ) {
+		return;
+	}
+
+	//Loop and include each found file
+	foreach ( $pathnames as $file_path ) {
+
+		prso_include_file( $file_path );
+
+	}
+
+	return;
+}
+
+/**
 * Debug helper
 * Prints out debug information about given variable.
 *

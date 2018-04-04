@@ -34,8 +34,7 @@ class PrsoShortcakeShortcodes {
 		$cpt_path = dirname( __FILE__ ) . '/shortcodes';
 
 		//Include shortcake shortcode for posts
-		//include_once( "{$cpt_path}/class.shortcake.collections_cta.php" );
-		include_once( "{$cpt_path}/class.shortcake.content_tools.php" );
+		prso_include_all_files( $cpt_path );
 
 	}
 
