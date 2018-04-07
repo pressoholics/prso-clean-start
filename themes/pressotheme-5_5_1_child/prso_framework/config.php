@@ -372,8 +372,11 @@ class PrsoThemeConfig {
 	protected $theme_script_merge_args = array(
 		'merged_path' 		=> '/javascripts/app.min.js',
 		'depends'			=> array( 'jquery' ),
-		'handles'			=> array( 
-			'modernizr', 'foundation-core', 'foundation-abide', 'foundation-accordion', 'foundation-alerts', 'foundation-clearing', 'foundation-dropdown', 'foundation-equalizer', 'foundation-interchange', 'foundation-joyride', 'foundation-magellan', 'foundation-offcanvas', 'foundation-orbit', 'foundation-reveal', 'foundation-slider', 'foundation-tab', 'foundation-tooltip', 'foundation-topbar', 'jquery-event-move', 'jquery-event-swipe', 'prso-theme-app'
+		'handles'			=> array(
+			'modernizr', 'foundation-core', 'foundation-abide', 'foundation-accordion', 'foundation-alerts', 'foundation-clearing',
+			'foundation-dropdown', 'foundation-equalizer', 'foundation-interchange', 'foundation-joyride', 'foundation-magellan',
+			'foundation-offcanvas', 'foundation-orbit', 'foundation-reveal', 'foundation-slider', 'foundation-tab', 'foundation-tooltip',
+			'foundation-topbar', 'jquery-event-move', 'jquery-event-swipe', 'jquery-cookie', 'jquery-placeholder', 'fastclick', 'prso-theme-app'
 		)
 	);
 	*/

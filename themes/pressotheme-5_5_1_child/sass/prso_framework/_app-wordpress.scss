@@ -338,40 +338,7 @@ a[class^='tag-link-']:hover{
 /* Small Device Styles Here */
 @media only screen and (max-width: 768px) {
 	
-	/* widget styles */
-	ul.children {
-		display: none;
-	}
 	
-	.widget li a{
-		display: block;
-		color: #ffffff;
-		text-align: center;
-		border-radius: 3px 3px 3px 3px;
-		padding: 5px;
-		background: none repeat scroll 0 0 #2BA6CB;
-	}
-	
-	.widget li .prso-post-count {
-		display: none;
-	}
-
-	.widget_archive ul {
-		margin-top: 6px;
-	}
-	
-	.widget_archive > aside > ul > li,
-	.widget_categories > aside > ul > li {
-		height: 35px;
-	}
-	
-	.widget_nav_menu {
-		display: none;
-	}
-	
-	#tag-cloud > p > a.label {
-		line-height: 2;
-	}
 	
 }
 
