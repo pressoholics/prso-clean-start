@@ -116,7 +116,7 @@ function vt_woo_remove_wc_breadcrumbs() {
 function vt_woocommerce_pagination() {
 
 	?>
-	<?php echo prso_render_load_more_button( 'products' ); ?>
+	<?php echo prso_render_load_more_button( 'products', 'ul.products' ); ?>
 	<?php
 
 }
@@ -160,6 +160,23 @@ function vt_woo_rest_product_query( $args, $request ) {
 
 	$args['posts_per_page'] = get_option( 'posts_per_page' );
 	$args['post_status']    = 'publish';
+
+	//Detect category filter in request
+	if ( isset( $request['filter']['cat'] ) ) {
+
+		unset( $args['cat'] );
+
+		$term_id = intval( $request['filter']['cat'] );
+
+		$args['tax_query'] = array(
+			array(
+				'taxonomy' => 'product_cat',
+				'field'    => 'term_id',
+				'terms'    => array( $term_id ),
+			),
+		);
+
+	}
 
 	return $args;
 }

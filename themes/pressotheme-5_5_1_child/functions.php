@@ -170,12 +170,33 @@ function prso_theme_localize() {
 		'products'     => rest_url( 'wc/v1/products' ),
 		'current_page' => get_query_var( 'paged' ),
 		'nonce'        => wp_create_nonce( 'wp_rest' ),
+		'filter'       => prso_get_queried_term_id(), //HEY!! make sure you hook into rest api get_items filter for any endpoint using filter['cat'] see woocommerce.php -> vt_woo_rest_product_query() for example
 	);
 	**/
 	
 	
 	wp_localize_script( $handle, $obj_name, $data_array );
 	
+}
+
+/**
+ * prso_get_queried_term_name
+ *
+ * Helper to return current queried term id if set
+ *
+ * @access public
+ * @author Ben Moody
+ */
+function prso_get_queried_term_id() {
+
+	//vars
+	$queried_obj = get_queried_object();
+
+	if ( ! isset( $queried_obj->term_id ) ) {
+		return false;
+	}
+
+	return $queried_obj->term_id;
 }
 
 /**

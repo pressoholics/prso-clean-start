@@ -62,7 +62,7 @@ jQuery.noConflict();
 		/**
 		function init_skrollr() {
 			
-			var s = skrollr.init({
+			const s = skrollr.init({
 		        render: function(data) {
 		            //Debugging - Log the current scroll position.
 		            console.log(data);
@@ -74,8 +74,8 @@ jQuery.noConflict();
 		**/
 		
 		/**
-		var post_template	= $('#content-template');
-		var posts 			= new wp.api.collections.Posts();
+		const post_template	= $('#content-template');
+		const posts 			= new wp.api.collections.Posts();
 		
 		posts.fetch().done( function() {
 		    
@@ -99,16 +99,17 @@ jQuery.noConflict();
      * @access    public
      * @author    Ben Moody
      */
-    var load_more_page = 2;
+    let load_more_page = 2;
     function prso_load_more(event) {
 
-        //vars
-        var rest_endpoint = $(this).data('rest-endpoint');
-        var destination = $(this).data('destination');
-        var destination_element = $('body').find( destination );
-        var endpoint = null;
-        var moreButton = $(this);
-        var results = null;
+        //lets
+        const rest_endpoint = $(this).data('rest-endpoint');
+        const destination = $(this).data('destination');
+        const destination_element = $('body').find( destination );
+        let endpoint = null;
+        let moreButton = $(this);
+        let filters = '';
+        let results = null;
 
         event.preventDefault();
 
@@ -131,9 +132,22 @@ jQuery.noConflict();
 
         }
 
+        //Detect if current page is filtered
+        if ( prsoThemeLocalVars.wp_api.filter !== undefined) {
+
+            if( prsoThemeLocalVars.wp_api.filter !== false ) {
+
+                let object_filter = prsoThemeLocalVars.wp_api.filter;
+                
+                filters = `&filter[cat]=${object_filter}`;
+
+            }
+
+        }
+
         //Try and get data from rest api
         $.ajax({
-            url: endpoint + '?page=' + load_more_page,
+            url: endpoint + '?page=' + load_more_page + filters,
             method: 'GET',
             beforeSend: function ( xhr ) {
                 xhr.setRequestHeader( 'X-WP-Nonce', prsoThemeLocalVars.wp_api.nonce );
@@ -143,7 +157,7 @@ jQuery.noConflict();
             },
         }).done(function (posts, status, xhr) {
 
-            var total_pages = xhr.getResponseHeader('X-WP-TotalPages');
+            let total_pages = xhr.getResponseHeader('X-WP-TotalPages');
 
             $.each(posts, function (i, post) {
 
