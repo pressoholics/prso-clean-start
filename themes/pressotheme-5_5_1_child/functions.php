@@ -12,6 +12,16 @@
 */
 
 /**
+ * WooCommerce Support
+ *
+ * Include theme woocommerce file to use a framework for woo projects
+ *
+ * @access public
+ * @author Ben Moody
+ */
+//prso_include_file( get_stylesheet_directory() . '/prso_framework/woocommerce.php' );
+
+/**
 * prso_allow_iframes_filter
 * 
 * @CALLED BY FILTER 'wp_kses_allowed_html'
@@ -155,9 +165,73 @@ function prso_theme_localize() {
 	
 	/** Cache data for localization **/
 	
+	/**
+	$data_array['wp_api'] = array(
+		'products'     => rest_url( 'wc/v1/products' ),
+		'current_page' => get_query_var( 'paged' ),
+		'nonce'        => wp_create_nonce( 'wp_rest' ),
+	);
+	**/
+	
 	
 	wp_localize_script( $handle, $obj_name, $data_array );
 	
+}
+
+/**
+ * prso_have_more_pages
+ *
+ * Helper to find out if there are more pages of results in wp_query
+ *
+ * @access    public
+ * @author    Ben Moody
+ */
+function prso_have_more_pages() {
+
+	//vars
+	global $wp_query;
+	$max_pages = $wp_query->max_num_pages;
+
+	if ( $max_pages > 1 ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * prso_render_load_more_button
+ *
+ * Render a load more button complete with data element for rest api endpoint
+ *
+ * @param string $endpoint - wp rest api endpoint, should be in rest_api array
+ *     in local object
+ *
+ * @return string load more button html
+ * @access public
+ * @author Ben Moody
+ */
+function prso_render_load_more_button( $endpoint = null ) {
+
+	$output = null;
+
+	ob_start();
+	?>
+	<?php if ( prso_have_more_pages() ): ?>
+		<div class="load-more-container">
+			<button class="load-more"
+					data-destination="ul.products"
+					data-rest-endpoint="<?php echo esc_html( $endpoint ); ?>">
+				<?php _ex( 'View More', 'button text', PRSOTHEMEFRAMEWORK__DOMAIN ); ?>
+				<i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+			</button>
+		</div>
+	<?php endif; ?>
+	<?php
+	$output = ob_get_contents();
+	ob_end_clean();
+
+	return $output;
 }
 
 /**

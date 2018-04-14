@@ -55,6 +55,9 @@ jQuery.noConflict();
 	/*** Init Zurb Foundation **/
 	$(document).ready(function(){
 		
+		//Load More
+        //$('body').on('click', '.load-more', prso_load_more);
+		
 		/*** Skrollr -- Parallax Effects ***/
 		/**
 		function init_skrollr() {
@@ -70,6 +73,7 @@ jQuery.noConflict();
 		init_skrollr();
 		**/
 		
+		/**
 		var post_template	= $('#content-template');
 		var posts 			= new wp.api.collections.Posts();
 		
@@ -80,49 +84,86 @@ jQuery.noConflict();
 			jQuery( '#json-output' ).html( _.template(post_template.html(), {posts: posts.models}) );
 		    
 		});
-		
-		//Add 'active' class to navigation elements
-		function activate_nav_items() {
-			
-			//Init vars
-			var currentPostID = prsoParentThemeLocalVars['currentPostID'];
-			
-			//Add active class to any nav li elements for this post
-			$('.active-for-post-' + currentPostID).addClass('active');
-			
-			//Add active class to all the nav item's parents
-			$('.active-for-post-' + currentPostID).parents('li.menu-item').addClass('active');
-			
-		}
-		activate_nav_items();
-		
-		/*** Use this js doc for all application specific JS ***/
-		
-		// Input placeholder text fix for IE
-		$('[placeholder]').focus(function() {
-		  var input = $(this);
-		  if (input.val() == input.attr('placeholder')) {
-			input.val('');
-			input.removeClass('placeholder');
-		  }
-		}).blur(function() {
-		  var input = $(this);
-		  if (input.val() == '' || input.val() == input.attr('placeholder')) {
-			input.addClass('placeholder');
-			input.val(input.attr('placeholder'));
-		  }
-		}).blur();
-		
-		// Prevent submission of empty form
-		$('[placeholder]').parents('form').submit(function() {
-		  $(this).find('[placeholder]').each(function() {
-			var input = $(this);
-			if (input.val() == input.attr('placeholder')) {
-			  input.val('');
-			}
-		  })
-		});
+		**/
 		
 	});
+	
+	/**
+     * prso_load_more
+     *
+     * Helper to load more content via ajax on a contextual basis
+     * Function uses the context data param on the load more link
+     * This context param let's us know where on the site the load more is located
+     * and thus we can call the appropriate helper functions to load the correct data
+     *
+     * @access    public
+     * @author    Ben Moody
+     */
+    var load_more_page = 2;
+    function prso_load_more(event) {
+
+        //vars
+        var rest_endpoint = $(this).data('rest-endpoint');
+        var destination = $(this).data('destination');
+        var destination_element = $('body').find( destination );
+        var endpoint = null;
+        var moreButton = $(this);
+        var results = null;
+
+        event.preventDefault();
+
+        if( destination_element.length < 1 ) {
+            return;
+        }
+
+        if ( prsoThemeLocalVars.wp_api[rest_endpoint] === undefined) {
+            return;
+        }
+
+        endpoint = prsoThemeLocalVars.wp_api[rest_endpoint];
+
+        if ( prsoThemeLocalVars.wp_api.current_page === undefined) {
+            return;
+        } else if( prsoThemeLocalVars.wp_api.current_page > 0 ) {
+
+            //Set page to that provded by wp_query as user is not on the 1st page of results
+            load_more_page = prsoThemeLocalVars.wp_api.current_page;
+
+        }
+
+        //Try and get data from rest api
+        $.ajax({
+            url: endpoint + '?page=' + load_more_page,
+            method: 'GET',
+            beforeSend: function ( xhr ) {
+                xhr.setRequestHeader( 'X-WP-Nonce', prsoThemeLocalVars.wp_api.nonce );
+
+                moreButton.addClass('loading');
+
+            },
+        }).done(function (posts, status, xhr) {
+
+            var total_pages = xhr.getResponseHeader('X-WP-TotalPages');
+
+            $.each(posts, function (i, post) {
+
+                destination_element.append( post.item_html );
+
+            });
+
+            //Are we on the last page?
+            if( load_more_page >= total_pages ) {
+                moreButton.hide();
+            }
+
+            load_more_page++;
+
+        }).always(function () {
+
+            moreButton.removeClass('loading');
+
+        });
+
+    }
 	
 })(jQuery);

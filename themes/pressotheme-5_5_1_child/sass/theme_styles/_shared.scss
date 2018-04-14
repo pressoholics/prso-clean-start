@@ -25,3 +25,37 @@
 	margin: 0 auto;
 	text-align: center;
 }
+
+/* Load More Button
+---------------------------------------------------------------------- */
+.load-more-container {
+	text-align: center;
+	clear: both;
+}
+
+button.load-more {
+	display: inline-block;
+	position: relative;
+
+	&:hover, &:focus {
+		text-decoration: underline;
+		outline: none;
+	}
+
+	i {
+		display: none;
+		@include rem(font-size, 20px);
+		position: absolute;
+		right: 0;
+		top: 17px;
+	}
+
+	&.loading {
+
+		i {
+			display: block;
+		}
+
+	}
+
+}
