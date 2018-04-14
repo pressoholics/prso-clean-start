@@ -1,0 +1,412 @@
+/**
+ * Main WooCommerce styles
+ */
+.woocommerce {
+
+  ul.products {
+    @include block-grid(
+        // This controls how many elements will be on each row of the block grid. Set this to whatever number you need, up to the max allowed in the variable.
+        // Available options: 1-12 by default, and false.
+        $per-row: 1,
+
+        // This controls how much space is between each item in the block grid.
+        // Use a variable or any pixel or em values.
+        $spacing: $block-grid-default-spacing,
+
+        // This controls whether or not base styles come through, set to false to leave out.
+        $base-style: true
+    );
+
+    @media #{$medium-up} {
+      @include block-grid(
+        // This controls how many elements will be on each row of the block grid. Set this to whatever number you need, up to the max allowed in the variable.
+        // Available options: 1-12 by default, and false.
+              $per-row: 3,
+
+                // This controls how much space is between each item in the block grid.
+                // Use a variable or any pixel or em values.
+              $spacing: $block-grid-default-spacing,
+
+                // This controls whether or not base styles come through, set to false to leave out.
+              $base-style: true
+      );
+    }
+
+  }
+
+  ul.products li.product {
+
+    h2 {
+      @include rem(font-size, 20px);
+      margin-bottom: 0;
+    }
+
+    .onsale {
+      display: none;
+      top: 0;
+      right: 0;
+      left: auto;
+      margin: -0.5em -0.5em 0 0;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    a img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 0 1em;
+      box-shadow: none;
+    }
+
+    strong {
+      display: block;
+    }
+
+    .star-rating {
+      font-size: 0.857em;
+    }
+
+    .price {
+      color: $grey-font;
+      display: block;
+      font-weight: normal;
+      margin-bottom: 0.5em;
+      @include rem(font-size, 14px);
+
+      del {
+        color: $grey-font;
+        opacity: 1;
+        display: inline-block;
+      }
+
+      ins {
+        color: $grey-font;
+        background: none;
+        font-weight: 700;
+        display: inline-block;
+        text-decoration: none;
+      }
+
+      .from {
+        font-size: 0.67em;
+        margin: -2px 0 0 0;
+        text-transform: uppercase;
+      }
+
+    }
+
+    ul.sale-price {
+      list-style: none;
+      margin: 0;
+
+      li:last-child {
+        color: $green;
+      }
+
+    }
+
+    /**
+	 * Buttons
+	 */
+    a.button,
+    button.button,
+    input.button,
+    #respond input#submit {
+      padding-right: 3.618em;
+      @include horizontal-align();
+
+      &:after {
+        @include font-awesome('\f07a');
+        @include rem(font-size, 20px);
+        position: absolute;
+        right: 14px;
+        top: 7px;
+      }
+
+      &.loading {
+        opacity: 0.25;
+
+        &::after {
+          font-family: 'WooCommerce';
+          content: '\e01c';
+          vertical-align: top;
+          font-weight: 400;
+          @include rem(font-size, 16px);
+          position: absolute;
+          top: 0.618em;
+          right: 0.5em;
+          animation: spin 2s linear infinite;
+        }
+      }
+
+      &.added {
+        padding-right: 2.618em;
+      }
+
+      .added_to_cart.wc-forward {
+        display: block;
+        text-align: center;
+      }
+
+      &.added::after {
+        font-family: 'WooCommerce';
+        content: '\e017';
+        margin-left: 0.53em;
+        vertical-align: bottom;
+        right: 0.8em;
+        position: absolute;
+        top: 1em;
+        @include rem(font-size, 12px);
+      }
+
+    }
+
+    /**
+     * Reviews
+     */
+    #reviews {
+      h2 small {
+        float: right;
+        font-size: 15px;
+        margin: 10px 0 0;
+
+        a {
+          text-decoration: none;
+        }
+      }
+
+      h3 {
+        margin: 0;
+      }
+
+      #respond {
+        margin: 0;
+        border: 0;
+        padding: 0;
+      }
+
+      #comment {
+        height: 75px;
+      }
+
+      #comments {
+        .add_review {
+          @include clearfix();
+        }
+
+        h2 {
+          clear: none;
+        }
+
+        ol.commentlist {
+          @include clearfix();
+          margin: 0;
+          width: 100%;
+          background: none;
+          list-style: none;
+
+          li {
+            padding: 0;
+            margin: 0 0 20px;
+            border: 0;
+            position: relative;
+            background: 0;
+            border: 0;
+
+            .meta {
+              font-size: 0.75em;
+            }
+
+            img.avatar {
+              float: left;
+              position: absolute;
+              top: 0;
+              left: 0;
+              padding: 3px;
+              width: 32px;
+              height: auto;
+              margin: 0;
+              box-shadow: none;
+            }
+
+            .comment-text {
+              margin: 0 0 0 50px;
+              border-radius: 4px;
+              padding: 1em 1em 0;
+              @include clearfix();
+
+              p {
+                margin: 0 0 1em;
+              }
+
+              p.meta {
+                font-size: 0.83em;
+              }
+            }
+          }
+
+          ul.children {
+            list-style: none outside;
+            margin: 20px 0 0 50px;
+
+            .star-rating {
+              display: none;
+            }
+          }
+
+          #respond {
+            border-radius: 4px;
+            padding: 1em 1em 0;
+            margin: 20px 0 0 50px;
+          }
+        }
+
+        .commentlist > li::before {
+          content: '';
+        }
+      }
+    }
+
+    /**
+     * Star ratings
+     */
+    .star-rating {
+      overflow: hidden;
+      position: relative;
+      height: 1em;
+      line-height: 1;
+      font-size: 1em;
+      width: 6.4em;
+      font-family: 'star';
+      float: left;
+      letter-spacing: 3px;
+
+      &::before {
+        content: '\73\73\73\73\73';
+        float: left;
+        top: 0;
+        left: 0;
+        position: absolute;
+      }
+
+      span {
+        overflow: hidden;
+        float: left;
+        top: 0;
+        left: 0;
+        position: absolute;
+        padding-top: 1.5em;
+      }
+
+      span::before {
+        content: '\53\53\53\53\53';
+        top: 0;
+        position: absolute;
+        left: 0;
+      }
+
+    }
+
+    div.review-count {
+      float: left;
+      @include rem(margin, -3px 0 0px 15px);
+    }
+
+    .woocommerce-product-rating {
+      @include clearfix();
+      line-height: 2;
+      display: block;
+
+      .star-rating {
+        margin: 0.5em 4px 0 0;
+        float: left;
+      }
+    }
+
+    .products .star-rating {
+      display: block;
+      margin: 0 0 0.5em;
+      float: none;
+    }
+
+    .hreview-aggregate .star-rating {
+      margin: 10px 0 0;
+    }
+
+    #review_form #respond {
+      @include clearfix();
+      position: static;
+      margin: 0;
+      width: auto;
+      padding: 0;
+      background: transparent none;
+      border: 0;
+
+      p {
+        margin: 0 0 10px;
+      }
+
+      .form-submit input {
+        left: auto;
+      }
+
+      textarea {
+        box-sizing: border-box;
+        width: 100%;
+      }
+    }
+
+    p.stars {
+      a {
+        position: relative;
+        height: 1em;
+        width: 1em;
+        text-indent: -999em;
+        display: inline-block;
+        text-decoration: none;
+
+        &::before {
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 1em;
+          height: 1em;
+          line-height: 1;
+          font-family: 'WooCommerce';
+          content: '\e021';
+          text-indent: 0;
+        }
+
+        &:hover ~ a::before {
+          content: '\e021';
+        }
+      }
+
+      &:hover a::before {
+        content: '\e020';
+      }
+
+      &.selected {
+        a.active {
+          &::before {
+            content: '\e020';
+          }
+
+          ~ a::before {
+            content: '\e021';
+          }
+        }
+
+        a:not( .active )::before {
+          content: '\e020';
+        }
+      }
+    }
+
+  }
+
+}
