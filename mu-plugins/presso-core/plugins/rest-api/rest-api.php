@@ -5,8 +5,9 @@
  *
  * Class contains any customisation to rest api
  *∂
- * @access 	public
- * @author	Ben Moody
+ *
+ * @access    public
+ * @author    Ben Moody
  */
 class PrsoCustomRestApi {
 
@@ -18,6 +19,79 @@ class PrsoCustomRestApi {
 			'restrict_external_rest_access',
 		) );
 
+		add_filter( 'rest_prepare_post', array(
+			$this,
+			'rest_prepare_post',
+		), 10, 3 );
+
+		add_filter( 'rest_post_query', array(
+			$this,
+			'rest_post_query',
+		), 999, 2 );
+
+	}
+
+	/**
+	 * rest_prepare_post
+	 *
+	 * @CALLED BY FILTER/ 'rest_prepare_post'
+	 *
+	 * Filter rest api response for indivdual posts
+	 *
+	 * @access public
+	 * @author Ben Moody
+	 */
+	function rest_prepare_post( $response, $post_object, $request ) {
+
+		global $post;
+
+		$post = $post_object;
+
+		setup_postdata( $post );
+
+		ob_start();
+			get_template_part('/template_parts/part', 'posts_grid_item');
+		$response->data['item_html'] = ob_get_contents();
+		ob_end_clean();
+
+		wp_reset_postdata();
+
+		return rest_ensure_response( $response );
+	}
+
+	/**
+	 * rest_post_query
+	 *
+	 * @CALLED BY FILTER/ 'rest_post_query'
+	 *
+	 * Force posts per page to match WP deafult
+	 *
+	 * @access public
+	 * @author Ben Moody
+	 */
+	function rest_post_query( $args, $request ) {
+
+		$args['posts_per_page'] = get_option( 'posts_per_page' );
+		$args['post_status']    = 'publish';
+
+		//Detect category filter in request
+		if ( isset( $request['filter']['cat'] ) ) {
+
+			unset( $args['cat'] );
+
+			$term_id = intval( $request['filter']['cat'] );
+
+			$args['tax_query'] = array(
+				array(
+					'taxonomy' => 'category',
+					'field'    => 'term_id',
+					'terms'    => array( $term_id ),
+				),
+			);
+
+		}
+
+		return $args;
 	}
 
 	/**
@@ -70,4 +144,5 @@ class PrsoCustomRestApi {
 	}
 
 }
+
 new PrsoCustomRestApi();

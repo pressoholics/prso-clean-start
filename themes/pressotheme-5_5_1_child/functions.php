@@ -167,6 +167,7 @@ function prso_theme_localize() {
 	
 	/**
 	$data_array['wp_api'] = array(
+		'posts'        => rest_url( 'wp/v2/posts' ),
 		'products'     => rest_url( 'wc/v1/products' ),
 		'current_page' => get_query_var( 'paged' ),
 		'nonce'        => wp_create_nonce( 'wp_rest' ),
@@ -207,11 +208,21 @@ function prso_get_queried_term_id() {
  * @access    public
  * @author    Ben Moody
  */
-function prso_have_more_pages() {
+function prso_have_more_pages( $post_type = 'posts' ) {
 
 	//vars
 	global $wp_query;
-	$max_pages = $wp_query->max_num_pages;
+
+	//Detect content type
+	switch ( $post_type ) {
+		case 'comments':
+			$max_pages = $wp_query->max_num_comment_pages;
+			break;
+		default:
+			$max_pages = $wp_query->max_num_pages;
+			break;
+	}
+
 
 	if ( $max_pages > 1 ) {
 		return true;
@@ -232,16 +243,16 @@ function prso_have_more_pages() {
  * @access public
  * @author Ben Moody
  */
-function prso_render_load_more_button( $endpoint = null ) {
+function prso_render_load_more_button( $endpoint = null, $dom_destination = 'ul.content', $post_type = 'posts' ) {
 
 	$output = null;
 
 	ob_start();
 	?>
-	<?php if ( prso_have_more_pages() ): ?>
+	<?php if ( prso_have_more_pages( $post_type ) ): ?>
 		<div class="load-more-container">
 			<button class="load-more"
-					data-destination="ul.products"
+					data-destination="<?php echo esc_html( $dom_destination ); ?>"
 					data-rest-endpoint="<?php echo esc_html( $endpoint ); ?>">
 				<?php _ex( 'View More', 'button text', PRSOTHEMEFRAMEWORK__DOMAIN ); ?>
 				<i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
@@ -295,4 +306,15 @@ function disable_embeds_init() {
 	remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 	remove_action( 'admin_print_styles', 'print_emoji_styles' );
 
+}
+
+//add_filter( 'body_class', 'prso_multisite_body_classes' );
+function prso_multisite_body_classes( $classes ) {
+
+	$id        = get_current_blog_id();
+	$slug      = strtolower( str_replace( ' ', '-', trim( get_bloginfo( 'name' ) ) ) );
+	$classes[] = $slug;
+	$classes[] = 'site-id-' . $id;
+
+	return $classes;
 }
