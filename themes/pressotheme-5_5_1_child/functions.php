@@ -318,3 +318,13 @@ function prso_multisite_body_classes( $classes ) {
 
 	return $classes;
 }
+
+add_filter( 'excerpt_length', 'prso_excerpt_length', 999 );
+function prso_excerpt_length( $length ) {
+	return 15;
+}
+
+add_filter('excerpt_more', 'prso_excerpt_more');
+function prso_excerpt_more( $more ) {
+	return '...';
+}
