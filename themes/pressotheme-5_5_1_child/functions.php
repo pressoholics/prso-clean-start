@@ -172,7 +172,7 @@ function prso_theme_localize() {
 		'current_page' => get_query_var( 'paged' ),
 		'nonce'        => wp_create_nonce( 'wp_rest' ),
 		'filter'       => prso_get_queried_term_id(), //HEY!! make sure you hook into rest api get_items filter for any endpoint using filter['cat'] see woocommerce.php -> vt_woo_rest_product_query() for example
-		'search'       => esc_html( get_search_query() ),
+		'search'       => prso_get_search_query(),
 	);
 	**/
 	
@@ -198,7 +198,27 @@ function prso_get_queried_term_id() {
 		return false;
 	}
 
-	return int_val( $queried_obj->term_id );
+	return intval( $queried_obj->term_id );
+}
+
+/**
+ * prso_get_search_query
+ *
+ * Helper to return search query string if set
+ *
+ * @access public
+ * @author Ben Moody
+ */
+function prso_get_search_query() {
+
+	//vars
+	$query = esc_html( get_search_query() );
+
+	if ( empty( $query ) ) {
+		return false;
+	}
+
+	return $query;
 }
 
 /**
@@ -244,17 +264,28 @@ function prso_have_more_pages( $post_type = 'posts' ) {
  * @access public
  * @author Ben Moody
  */
-function prso_render_load_more_button( $endpoint = null, $dom_destination = 'ul.content', $post_type = 'posts' ) {
+function prso_render_load_more_button( $args = array() ) {
 
-	$output = null;
+	//vars
+	$defaults = array(
+		'endpoint'            => null,
+		'dom_destination'     => 'ul.content',
+		'post_type'           => 'posts',
+		'force_button_render' => false,
+		'posts_per_page'      => 0,
+	);
+	$output   = null;
+
+	$args = wp_parse_args( $args, $defaults );
 
 	ob_start();
 	?>
-	<?php if ( prso_have_more_pages( $post_type ) ): ?>
+	<?php if ( prso_have_more_pages( $args['post_type'] ) || ( true === $args['force_button_render'] ) ): ?>
 		<div class="load-more-container">
 			<button class="load-more"
-					data-destination="<?php echo esc_html( $dom_destination ); ?>"
-					data-rest-endpoint="<?php echo esc_html( $endpoint ); ?>">
+					data-destination="<?php echo esc_html( $args['dom_destination'] ); ?>"
+					data-rest-endpoint="<?php echo esc_html( $args['endpoint'] ); ?>"
+					data-posts-per-page="<?php echo intval( $args['posts_per_page'] ); ?>">
 				<?php _ex( 'View More', 'button text', PRSOTHEMEFRAMEWORK__DOMAIN ); ?>
 				<i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
 			</button>

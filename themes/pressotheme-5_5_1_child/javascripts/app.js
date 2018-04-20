@@ -107,10 +107,12 @@ jQuery.noConflict();
         const rest_endpoint = $(this).data('rest-endpoint');
         const destination = $(this).data('destination');
         const destination_element = $('body').find(destination);
+        const posts_per_page = $(this).data('posts-per-page');
         let endpoint = null;
         let moreButton = $(this);
         let filters = '';
         let search = '';
+        let per_page = '';
         let results = null;
 
         event.preventDefault();
@@ -160,6 +162,21 @@ jQuery.noConflict();
 
         }
 
+        //Detect posts per page override
+        if (posts_per_page !== undefined) {
+
+            if (0 !== posts_per_page) {
+
+                per_page = `&per_page=${posts_per_page}`;
+
+            } else {
+
+                per_page = '';
+
+            }
+
+        }
+
         //Try and get data from rest api
         let args = {
             endpoint: endpoint,
@@ -167,6 +184,7 @@ jQuery.noConflict();
             search: search,
             destination_element: destination_element,
             moreButton: moreButton,
+            posts_per_page: per_page,
         };
 
         //Make call to get api results, set callback functions to deal with results
@@ -180,19 +198,19 @@ jQuery.noConflict();
     }
 
     /**
-    * prso_load_more_click__before_callback
-    *
-    * @CALLED BY Callback function for prso_load_more->getRestApiResults()
-    *
-    * Actions before call to rest api is made
-    *
-    * @param object args
-    * @access public
-    * @author Ben Moody
-    */
-    function prso_load_more_click__before_callback( args ) {
+     * prso_load_more_click__before_callback
+     *
+     * @CALLED BY Callback function for prso_load_more->getRestApiResults()
+     *
+     * Actions before call to rest api is made
+     *
+     * @param object args
+     * @access public
+     * @author Ben Moody
+     */
+    function prso_load_more_click__before_callback(args) {
 
-        if( args.moreButton === undefined ) {
+        if (args.moreButton === undefined) {
             return;
         }
 
@@ -211,9 +229,9 @@ jQuery.noConflict();
      * @access public
      * @author Ben Moody
      */
-    function prso_load_more_click__successCallback( args ) {
+    function prso_load_more_click__successCallback(args) {
 
-        if(
+        if (
             (args.destination_element === undefined) ||
             (args.moreButton === undefined) ||
             (args.posts === undefined)
@@ -248,9 +266,9 @@ jQuery.noConflict();
      * @access public
      * @author Ben Moody
      */
-    function prso_load_more_click__alwaysCallback( args ) {
+    function prso_load_more_click__alwaysCallback(args) {
 
-        if( args.moreButton === undefined ) {
+        if (args.moreButton === undefined) {
             return;
         }
 
@@ -259,41 +277,46 @@ jQuery.noConflict();
     }
 
     /**
-    * getRestApiResults
-    *
-    * Function to make a data request to rest api
-    *
-    * @param object args - filters, search
-    * @param beforeSendCallback - callback function when request is sent
-    * @param successCallback - callback function when request is succesfully completed
-    * @param alwaysCallback - callback function always made for request
-    * @access public
-    * @author Ben Moody
-    */
-    function getRestApiResults( args, beforeSendCallback, successCallback, alwaysCallback ) {
+     * getRestApiResults
+     *
+     * Function to make a data request to rest api
+     *
+     * @param object args - filters, search
+     * @param beforeSendCallback - callback function when request is sent
+     * @param successCallback - callback function when request is succesfully completed
+     * @param alwaysCallback - callback function always made for request
+     * @access public
+     * @author Ben Moody
+     */
+    function getRestApiResults(args, beforeSendCallback, successCallback, alwaysCallback) {
 
         //vars
-        let filters = null;
-        let search = null;
+        let filters = '';
+        let search = '';
+        let posts_per_page = '';
 
-        if( args.filters !== undefined ) {
+        if (args.filters !== undefined) {
             filters = args.filters;
         }
 
-        if( args.search !== undefined ) {
+        if (args.search !== undefined) {
             search = args.search;
+        }
+
+        if (args.posts_per_page !== undefined) {
+            posts_per_page = args.posts_per_page;
         }
 
         //Try and get data from rest api
         $.ajax({
-            url: args.endpoint + '?page=' + load_more_page + filters + search,
+            url: args.endpoint + '?page=' + load_more_page + filters + search + posts_per_page,
             method: 'GET',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('X-WP-Nonce', prsoThemeLocalVars.wp_api.nonce);
 
-                if( beforeSendCallback !== undefined ) {
+                if (beforeSendCallback !== undefined) {
 
-                    beforeSendCallback( args );
+                    beforeSendCallback(args);
 
                 }
 
@@ -302,21 +325,21 @@ jQuery.noConflict();
 
             let total_pages = xhr.getResponseHeader('X-WP-TotalPages');
 
-            if( successCallback !== undefined ) {
+            if (successCallback !== undefined) {
 
                 args.posts = posts;
 
                 args.total_pages = total_pages;
 
-                successCallback( args );
+                successCallback(args);
 
             }
 
         }).always(function () {
 
-            if( alwaysCallback !== undefined ) {
+            if (alwaysCallback !== undefined) {
 
-                alwaysCallback( args );
+                alwaysCallback(args);
 
             }
 

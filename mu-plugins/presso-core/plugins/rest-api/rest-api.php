@@ -19,6 +19,11 @@ class PrsoCustomRestApi {
 			'restrict_external_rest_access',
 		) );
 
+		add_filter( 'woocommerce_rest_check_permissions', array(
+			$this,
+			'woo_restrict_external_rest_access',
+		), 999, 4 );
+
 		add_filter( 'rest_prepare_post', array(
 			$this,
 			'rest_prepare_post',
@@ -50,7 +55,7 @@ class PrsoCustomRestApi {
 		setup_postdata( $post );
 
 		ob_start();
-			get_template_part('/template_parts/part', 'posts_grid_item');
+		get_template_part( '/template_parts/part', 'posts_grid_item' );
 		$response->data['item_html'] = ob_get_contents();
 		ob_end_clean();
 
@@ -73,6 +78,13 @@ class PrsoCustomRestApi {
 
 		$args['posts_per_page'] = get_option( 'posts_per_page' );
 		$args['post_status']    = 'publish';
+		$args['orderby']        = 'date';
+		$args['order']          = 'DESC';
+
+		//is search
+		if ( isset( $args['s'] ) && ! empty( $args['s'] ) ) {
+			
+		}
 
 		//Detect category filter in request
 		if ( isset( $request['filter']['cat'] ) ) {
@@ -95,6 +107,29 @@ class PrsoCustomRestApi {
 	}
 
 	/**
+	 * woo_restrict_external_rest_access
+	 *
+	 * @CALLED BY FILTER/ 'woocommerce_rest_check_permissions'
+	 *
+	 * Add our custom rest api access restriction to woocommerece which by
+	 *     default only allow logged in users to access it's api
+	 *
+	 * @access public
+	 * @author Ben Moody
+	 */
+	public function woo_restrict_external_rest_access( $permission, $context, $object_id, $post_type ) {
+
+		//vars
+		$custom_rest_access = $this->restrict_external_rest_access();
+
+		if ( is_wp_error( $custom_rest_access ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * restrict_external_rest_access
 	 *
 	 * @CALLED BY FILTER 'rest_authentication_errors'
@@ -108,7 +143,7 @@ class PrsoCustomRestApi {
 	 * @access public
 	 * @author Ben Moody
 	 */
-	public function restrict_external_rest_access( $result ) {
+	public function restrict_external_rest_access( $result = null ) {
 		if ( ! empty( $result ) ) {
 			return $result;
 		}
