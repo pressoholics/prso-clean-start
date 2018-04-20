@@ -88,7 +88,7 @@ jQuery.noConflict();
 		
 	});
 	
-	/**
+	 /**
      * prso_load_more
      *
      * Helper to load more content via ajax on a contextual basis
@@ -100,45 +100,60 @@ jQuery.noConflict();
      * @author    Ben Moody
      */
     let load_more_page = 2;
+
     function prso_load_more(event) {
 
         //lets
         const rest_endpoint = $(this).data('rest-endpoint');
         const destination = $(this).data('destination');
-        const destination_element = $('body').find( destination );
+        const destination_element = $('body').find(destination);
         let endpoint = null;
         let moreButton = $(this);
         let filters = '';
+        let search = '';
         let results = null;
 
         event.preventDefault();
 
-        if( destination_element.length < 1 ) {
+        if (destination_element.length < 1) {
             return;
         }
 
-        if ( prsoThemeLocalVars.wp_api[rest_endpoint] === undefined) {
+        if (prsoThemeLocalVars.wp_api[rest_endpoint] === undefined) {
             return;
         }
 
         endpoint = prsoThemeLocalVars.wp_api[rest_endpoint];
 
-        if ( prsoThemeLocalVars.wp_api.current_page === undefined) {
+        if (prsoThemeLocalVars.wp_api.current_page === undefined) {
             return;
-        } else if( prsoThemeLocalVars.wp_api.current_page > 0 ) {
+        } else if (prsoThemeLocalVars.wp_api.current_page > 0) {
 
             //Set page to that provded by wp_query as user is not on the 1st page of results
             load_more_page = prsoThemeLocalVars.wp_api.current_page;
 
         }
 
-        //Detect if current page is filtered
-        if ( prsoThemeLocalVars.wp_api.filter !== undefined) {
+        //Detect if current page has search query
+        if (prsoThemeLocalVars.wp_api.search !== undefined) {
 
-            if( prsoThemeLocalVars.wp_api.filter !== false ) {
+            if (prsoThemeLocalVars.wp_api.search !== false) {
+
+                let search_query = prsoThemeLocalVars.wp_api.search;
+
+                search = `&search=${search_query}`;
+
+            }
+
+        }
+
+        //Detect if current page is filtered
+        if (prsoThemeLocalVars.wp_api.filter !== undefined) {
+
+            if (prsoThemeLocalVars.wp_api.filter !== false) {
 
                 let object_filter = prsoThemeLocalVars.wp_api.filter;
-                
+
                 filters = `&filter[cat]=${object_filter}`;
 
             }
@@ -146,35 +161,164 @@ jQuery.noConflict();
         }
 
         //Try and get data from rest api
-        $.ajax({
-            url: endpoint + '?page=' + load_more_page + filters,
-            method: 'GET',
-            beforeSend: function ( xhr ) {
-                xhr.setRequestHeader( 'X-WP-Nonce', prsoThemeLocalVars.wp_api.nonce );
+        let args = {
+            endpoint: endpoint,
+            filters: filters,
+            search: search,
+            destination_element: destination_element,
+            moreButton: moreButton,
+        };
 
-                moreButton.addClass('loading');
+        //Make call to get api results, set callback functions to deal with results
+        getRestApiResults(
+            args,
+            prso_load_more_click__before_callback,
+            prso_load_more_click__successCallback,
+            prso_load_more_click__alwaysCallback,
+        );
+
+    }
+
+    /**
+    * prso_load_more_click__before_callback
+    *
+    * @CALLED BY Callback function for prso_load_more->getRestApiResults()
+    *
+    * Actions before call to rest api is made
+    *
+    * @param object args
+    * @access public
+    * @author Ben Moody
+    */
+    function prso_load_more_click__before_callback( args ) {
+
+        if( args.moreButton === undefined ) {
+            return;
+        }
+
+        args.moreButton.addClass('loading');
+
+    }
+
+    /**
+     * prso_load_more_click__successCallback
+     *
+     * @CALLED BY Callback function for prso_load_more->getRestApiResults()
+     *
+     * Actions on succesfull rest api request
+     *
+     * @param object args
+     * @access public
+     * @author Ben Moody
+     */
+    function prso_load_more_click__successCallback( args ) {
+
+        if(
+            (args.destination_element === undefined) ||
+            (args.moreButton === undefined) ||
+            (args.posts === undefined)
+        ) {
+            return;
+        }
+
+        $.each(args.posts, function (i, post) {
+
+            args.destination_element.append(post.item_html);
+
+        });
+
+        //Are we on the last page?
+        if (load_more_page >= args.total_pages) {
+            args.moreButton.hide();
+        }
+
+        //Global variable
+        load_more_page++;
+
+    }
+
+    /**
+     * prso_load_more_click__alwaysCallback
+     *
+     * @CALLED BY Callback function for prso_load_more->getRestApiResults()
+     *
+     * Actions to always be carried out when api request is made
+     *
+     * @param object args
+     * @access public
+     * @author Ben Moody
+     */
+    function prso_load_more_click__alwaysCallback( args ) {
+
+        if( args.moreButton === undefined ) {
+            return;
+        }
+
+        args.moreButton.removeClass('loading');
+
+    }
+
+    /**
+    * getRestApiResults
+    *
+    * Function to make a data request to rest api
+    *
+    * @param object args - filters, search
+    * @param beforeSendCallback - callback function when request is sent
+    * @param successCallback - callback function when request is succesfully completed
+    * @param alwaysCallback - callback function always made for request
+    * @access public
+    * @author Ben Moody
+    */
+    function getRestApiResults( args, beforeSendCallback, successCallback, alwaysCallback ) {
+
+        //vars
+        let filters = null;
+        let search = null;
+
+        if( args.filters !== undefined ) {
+            filters = args.filters;
+        }
+
+        if( args.search !== undefined ) {
+            search = args.search;
+        }
+
+        //Try and get data from rest api
+        $.ajax({
+            url: args.endpoint + '?page=' + load_more_page + filters + search,
+            method: 'GET',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('X-WP-Nonce', prsoThemeLocalVars.wp_api.nonce);
+
+                if( beforeSendCallback !== undefined ) {
+
+                    beforeSendCallback( args );
+
+                }
 
             },
         }).done(function (posts, status, xhr) {
 
             let total_pages = xhr.getResponseHeader('X-WP-TotalPages');
 
-            $.each(posts, function (i, post) {
+            if( successCallback !== undefined ) {
 
-                destination_element.append( post.item_html );
+                args.posts = posts;
 
-            });
+                args.total_pages = total_pages;
 
-            //Are we on the last page?
-            if( load_more_page >= total_pages ) {
-                moreButton.hide();
+                successCallback( args );
+
             }
-
-            load_more_page++;
 
         }).always(function () {
 
-            moreButton.removeClass('loading');
+            if( alwaysCallback !== undefined ) {
+
+                alwaysCallback( args );
+
+            }
 
         });
 

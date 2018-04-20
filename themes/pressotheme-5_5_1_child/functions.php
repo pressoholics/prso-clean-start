@@ -172,6 +172,7 @@ function prso_theme_localize() {
 		'current_page' => get_query_var( 'paged' ),
 		'nonce'        => wp_create_nonce( 'wp_rest' ),
 		'filter'       => prso_get_queried_term_id(), //HEY!! make sure you hook into rest api get_items filter for any endpoint using filter['cat'] see woocommerce.php -> vt_woo_rest_product_query() for example
+		'search'       => esc_html( get_search_query() ),
 	);
 	**/
 	
@@ -197,7 +198,7 @@ function prso_get_queried_term_id() {
 		return false;
 	}
 
-	return $queried_obj->term_id;
+	return int_val( $queried_obj->term_id );
 }
 
 /**
@@ -327,4 +328,32 @@ function prso_excerpt_length( $length ) {
 add_filter('excerpt_more', 'prso_excerpt_more');
 function prso_excerpt_more( $more ) {
 	return '...';
+}
+
+/**
+ * prso_pre_get_posts
+ *
+ * @CALLED BY /ACTION 'pre_get_posts'
+ *
+ * Set query vars
+ *
+ * @access public
+ * @author Ben Moody
+ */
+add_action( 'pre_get_posts', 'prso_pre_get_posts' );
+function prso_pre_get_posts( $query ) {
+
+	if ( is_admin() ) {
+		return;
+	}
+
+	if ( ! $query->is_main_query() ) {
+		return;
+	}
+
+	$query->set( 'orderby', 'date' );
+	$query->set( 'order', 'DESC' );
+	$query->set( 'post_per_page', get_option( 'posts_per_page' ) );
+	$query->set( 'post_status', 'publish' );
+
 }
