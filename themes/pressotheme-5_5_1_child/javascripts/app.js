@@ -108,11 +108,13 @@ jQuery.noConflict();
         const destination = $(this).data('destination');
         const destination_element = $('body').find(destination);
         const posts_per_page = $(this).data('posts-per-page');
+        const template_part = $(this).data('template-part');
         let endpoint = null;
         let moreButton = $(this);
         let filters = '';
         let search = '';
         let per_page = '';
+        let template_part_name = '';
         let results = null;
 
         event.preventDefault();
@@ -177,6 +179,15 @@ jQuery.noConflict();
 
         }
 
+        //Detect page template part override
+        if (template_part !== undefined) {
+
+            if( template_part !== false ) {
+                template_part_name = `&template_part=${template_part}`;
+            }
+
+        }
+
         //Try and get data from rest api
         let args = {
             endpoint: endpoint,
@@ -185,6 +196,7 @@ jQuery.noConflict();
             destination_element: destination_element,
             moreButton: moreButton,
             posts_per_page: per_page,
+            template_part: template_part_name,
         };
 
         //Make call to get api results, set callback functions to deal with results
@@ -294,6 +306,7 @@ jQuery.noConflict();
         let filters = '';
         let search = '';
         let posts_per_page = '';
+        let template_part = '';
 
         if (args.filters !== undefined) {
             filters = args.filters;
@@ -307,9 +320,13 @@ jQuery.noConflict();
             posts_per_page = args.posts_per_page;
         }
 
+        if (args.template_part !== undefined) {
+            template_part = args.template_part;
+        }
+
         //Try and get data from rest api
         $.ajax({
-            url: args.endpoint + '?page=' + load_more_page + filters + search + posts_per_page,
+            url: args.endpoint + '?page=' + load_more_page + filters + search + posts_per_page + template_part,
             method: 'GET',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('X-WP-Nonce', prsoThemeLocalVars.wp_api.nonce);

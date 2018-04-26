@@ -808,7 +808,9 @@ class PrsoThemeFunctions extends PrsoThemeAppController {
 			//to add header image support go here: //themble.com/support/adding-header-background-image-support/
 			
 			//Post format support
-			add_theme_support( 'post-formats', $post_format_args );	
+			if( !empty($post_format_args) ) {
+				add_theme_support( 'post-formats', $post_format_args );
+			}	
 			
 			//Add custom Nav Menu support
 			add_theme_support( 'menus' );            // wp menus

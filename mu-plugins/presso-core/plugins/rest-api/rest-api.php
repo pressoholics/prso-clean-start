@@ -24,15 +24,19 @@ class PrsoCustomRestApi {
 			'woo_restrict_external_rest_access',
 		), 999, 4 );
 
+/*
 		add_filter( 'rest_prepare_post', array(
 			$this,
 			'rest_prepare_post',
 		), 10, 3 );
+*/
 
+/*
 		add_filter( 'rest_post_query', array(
 			$this,
 			'rest_post_query',
 		), 999, 2 );
+*/
 
 	}
 
@@ -49,13 +53,17 @@ class PrsoCustomRestApi {
 	function rest_prepare_post( $response, $post_object, $request ) {
 
 		global $post;
+		$template_part = 'posts_grid_item';
+		$post          = $post_object;
 
-		$post = $post_object;
+		if ( isset( $_GET['template_part'] ) ) {
+			$template_part = esc_html( $_GET['template_part'] );
+		}
 
 		setup_postdata( $post );
 
 		ob_start();
-		get_template_part( '/template_parts/part', 'posts_grid_item' );
+		get_template_part( '/template_parts/part', $template_part );
 		$response->data['item_html'] = ob_get_contents();
 		ob_end_clean();
 
