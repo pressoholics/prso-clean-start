@@ -117,6 +117,23 @@ $sprites2x	: sprite-map("sprites_192/*.png");
 	transform: translateY(-50%);
 }
 
+@mixin horizontal-align($position: relative) {
+	position: $position;
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
+	transform: translateX(-50%);
+}
+
+@mixin center-align($position: relative) {
+	position: $position;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%,-50%);
+	-ms-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+}
+
 @mixin font-awesome($icon) {
 	content: $icon;
 	font-family: FontAwesome;
