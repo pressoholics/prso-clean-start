@@ -13,6 +13,9 @@ class PrsoCustomRestApi {
 
 	function __construct() {
 
+		//Register custom rest endpoints
+		$this->init_custom_endpoints();
+
 		//Prevent external access to ALL REST API endpoints
 		add_filter( 'rest_authentication_errors', array(
 			$this,
@@ -37,6 +40,26 @@ class PrsoCustomRestApi {
 			'rest_post_query',
 		), 999, 2 );
 */
+
+	}
+
+	/**
+	 * init_custom_endpoints
+	 *
+	 * @CALLED BY ACTION 'init'
+	 *
+	 * Includes all class files for each rest endpoint
+	 *
+	 * @access 	public
+	 * @author	Ben Moody
+	 */
+	public function init_custom_endpoints() {
+
+		//Vars
+		$cpt_path = dirname( __FILE__ ) . '/custom-endpoints';
+
+		//Include shortcake shortcode for posts
+		prso_include_all_files( $cpt_path );
 
 	}
 

@@ -126,7 +126,8 @@
 		    'custom-posts',
 		    'shortcake',
 		    'tinymce',
-		    'rest-api'
+		    'rest-api',
+		    'multilingual-press',
 		);
  		
  		return $result;
