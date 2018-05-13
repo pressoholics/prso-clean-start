@@ -113,8 +113,8 @@ class PrsoCustomRestApi {
 		$args['order']          = 'DESC';
 
 		//Per page param
-		if ( isset( $request['per_page'] ) ) {
-			$args['posts_per_page'] = intval( $request['per_page'] );
+		if ( isset( $_GET['per_page'] ) ) {
+			$args['posts_per_page'] = intval( $_GET['per_page'] );
 		}
 
 		//is search
