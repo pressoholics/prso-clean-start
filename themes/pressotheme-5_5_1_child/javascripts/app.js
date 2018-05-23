@@ -123,13 +123,13 @@ jQuery.noConflict();
             return;
         }
 
-        if (prsoThemeLocalVars.wp_api[rest_endpoint] === undefined) {
+        if (typeof prsoThemeLocalVars.wp_api[rest_endpoint] === 'undefined') {
             return;
         }
 
         endpoint = prsoThemeLocalVars.wp_api[rest_endpoint];
 
-        if (prsoThemeLocalVars.wp_api.current_page === undefined) {
+        if (typeof prsoThemeLocalVars.wp_api.current_page === 'undefined') {
             return;
         } else if (prsoThemeLocalVars.wp_api.current_page > 0) {
 
@@ -139,7 +139,7 @@ jQuery.noConflict();
         }
 
         //Detect if current page has search query
-        if (prsoThemeLocalVars.wp_api.search !== undefined) {
+        if (typeof prsoThemeLocalVars.wp_api.search !== 'undefined') {
 
             if (prsoThemeLocalVars.wp_api.search !== false) {
 
@@ -152,7 +152,7 @@ jQuery.noConflict();
         }
 
         //Detect if current page is filtered
-        if (prsoThemeLocalVars.wp_api.filter !== undefined) {
+        if (typeof prsoThemeLocalVars.wp_api.filter !== 'undefined') {
 
             if (prsoThemeLocalVars.wp_api.filter !== false) {
 
@@ -165,7 +165,7 @@ jQuery.noConflict();
         }
 
         //Detect posts per page override
-        if (posts_per_page !== undefined) {
+        if (typeof posts_per_page !== 'undefined') {
 
             if (0 !== posts_per_page) {
 
@@ -180,7 +180,7 @@ jQuery.noConflict();
         }
 
         //Detect page template part override
-        if (template_part !== undefined) {
+        if (typeof template_part !== undefined) {
 
             if( template_part !== false ) {
                 template_part_name = `&template_part=${template_part}`;
@@ -222,7 +222,7 @@ jQuery.noConflict();
      */
     function prso_load_more_click__before_callback(args) {
 
-        if (args.moreButton === undefined) {
+        if (typeof args.moreButton === 'undefined') {
             return;
         }
 
@@ -244,9 +244,9 @@ jQuery.noConflict();
     function prso_load_more_click__successCallback(args) {
 
         if (
-            (args.destination_element === undefined) ||
-            (args.moreButton === undefined) ||
-            (args.posts === undefined)
+            (typeof args.destination_element === 'undefined') ||
+            (typeof args.moreButton === 'undefined') ||
+            (typeof args.posts === 'undefined')
         ) {
             return;
         }
@@ -280,7 +280,7 @@ jQuery.noConflict();
      */
     function prso_load_more_click__alwaysCallback(args) {
 
-        if (args.moreButton === undefined) {
+        if (typeof args.moreButton === 'undefined') {
             return;
         }
 
@@ -308,19 +308,19 @@ jQuery.noConflict();
         let posts_per_page = '';
         let template_part = '';
 
-        if (args.filters !== undefined) {
+        if (typeof args.filters !== 'undefined') {
             filters = args.filters;
         }
 
-        if (args.search !== undefined) {
+        if (typeof args.search !== 'undefined') {
             search = args.search;
         }
 
-        if (args.posts_per_page !== undefined) {
+        if (typeof args.posts_per_page !== 'undefined') {
             posts_per_page = args.posts_per_page;
         }
 
-        if (args.template_part !== undefined) {
+        if (typeof args.template_part !== 'undefined') {
             template_part = args.template_part;
         }
 
@@ -331,7 +331,7 @@ jQuery.noConflict();
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('X-WP-Nonce', prsoThemeLocalVars.wp_api.nonce);
 
-                if (beforeSendCallback !== undefined) {
+                if (typeof beforeSendCallback !== 'undefined') {
 
                     beforeSendCallback(args);
 
@@ -342,7 +342,7 @@ jQuery.noConflict();
 
             let total_pages = xhr.getResponseHeader('X-WP-TotalPages');
 
-            if (successCallback !== undefined) {
+            if (typeof successCallback !== 'undefined') {
 
                 args.posts = posts;
 
@@ -354,7 +354,7 @@ jQuery.noConflict();
 
         }).always(function () {
 
-            if (alwaysCallback !== undefined) {
+            if (typeof alwaysCallback !== 'undefined') {
 
                 alwaysCallback(args);
 
