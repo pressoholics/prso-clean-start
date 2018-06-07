@@ -57,6 +57,7 @@ class Prso_Woocom_Pagination extends Prso_Woocom {
 		$defaults = array(
 			'endpoint'        => 'products',
 			'dom_destination' => 'ul.products',
+			'posts_per_page'  => self::$posts_per_page,
 		);
 
 		$load_more_param = apply_filters( 'prso_woocom_pagination__load_more_param', $defaults );

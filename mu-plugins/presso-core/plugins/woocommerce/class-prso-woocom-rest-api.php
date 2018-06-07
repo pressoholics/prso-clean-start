@@ -9,12 +9,12 @@ class Prso_Woocom_Rest_Api extends Prso_Woocom {
 
 	public function __construct() {
 
-		add_filter( 'woocommerce_rest_product_query', array(
+		add_filter( 'woocommerce_rest_product_object_query', array(
 			$this,
 			'woo_rest_product_query',
 		), 999, 2 );
 
-		add_filter( 'woocommerce_rest_prepare_product', array(
+		add_filter( 'woocommerce_rest_prepare_product_object', array(
 			$this,
 			'woo_rest_prepare_product',
 		), 999, 3 );
@@ -71,11 +71,9 @@ class Prso_Woocom_Rest_Api extends Prso_Woocom {
 	 */
 	function woo_rest_prepare_product( $response, $post_object, $request ) {
 
-		global $product, $post;
+		global $product;
 
-		$post = $post_object;
-
-		$product = wc_get_product( $post->ID );
+		$product = $post_object;
 
 		ob_start();
 		wc_get_template_part( 'content', 'product' );
