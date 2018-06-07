@@ -71,7 +71,11 @@ class Prso_Woocom_Rest_Api extends Prso_Woocom {
 	 */
 	function woo_rest_prepare_product( $response, $post_object, $request ) {
 
-		global $product;
+		global $product, $post;
+
+		$post = get_post( $post_object->id );
+
+		setup_postdata( $post );
 
 		$product = $post_object;
 
