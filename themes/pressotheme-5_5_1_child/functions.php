@@ -168,10 +168,10 @@ function prso_theme_localize() {
 	/**
 	$data_array['wp_api'] = array(
 		'posts'        => rest_url( 'wp/v2/posts' ),
-		'products'     => rest_url( 'wc/v1/products' ),
+		'products'     => rest_url( 'wc/v2/products' ),
 		'current_page' => get_query_var( 'paged' ),
 		'nonce'        => wp_create_nonce( 'wp_rest' ),
-		'filter'       => prso_get_queried_term_id(), //HEY!! make sure you hook into rest api get_items filter for any endpoint using filter['cat'] see woocommerce.php -> vt_woo_rest_product_query() for example
+		'filter'       => prso_get_queried_term_id(), //HEY!! make sure you hook into rest api get_items filter for any endpoint using filter['cat'] see Prso_Woocom_Rest_Api::woo_rest_product_query() for example
 		'search'       => prso_get_search_query(),
 	);
 	**/

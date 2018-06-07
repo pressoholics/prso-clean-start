@@ -128,6 +128,7 @@
 		    'tinymce',
 		    'rest-api',
 		    'multilingual-press',
+		    'woocommerce',
 		);
  		
  		return $result;
