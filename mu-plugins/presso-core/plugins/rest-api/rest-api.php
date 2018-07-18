@@ -14,7 +14,7 @@ class PrsoCustomRestApi {
 	function __construct() {
 
 		//Register custom rest endpoints
-		$this->init_custom_endpoints();
+		//$this->init_custom_endpoints();
 
 		//Prevent external access to ALL REST API endpoints
 		add_filter( 'rest_authentication_errors', array(

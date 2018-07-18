@@ -8,12 +8,14 @@ class Prso_Woocom {
 	public function __construct() {
 
 		//Register woo classes
-		$this->init_woo();
+		//$this->init_woo();
 
+/*
 		add_filter( 'woocommerce_add_to_cart_fragments', array(
 			$this,
 			'woo_cart_count_fragments',
 		), 10, 1 );
+*/
 
 	}
 
@@ -46,6 +48,10 @@ class Prso_Woocom {
 	public static function is_product_archive() {
 
 		$products_rest_api_endpoint = '/wp-json/wc/v2/products';
+
+		if( !function_exists('is_shop') ) {
+			return false;
+		}
 
 		//Is this a product rest api request
 		if ( isset( $_SERVER['REQUEST_URI'] ) && ( strpos( $_SERVER['REQUEST_URI'], $products_rest_api_endpoint ) !== false ) ) {
