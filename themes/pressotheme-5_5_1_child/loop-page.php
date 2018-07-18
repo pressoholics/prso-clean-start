@@ -1,4 +1,4 @@
-<div class="large-12 columns clearfix" role="main">
+<div class="large-8 columns clearfix" role="main">
 
 	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 	
@@ -13,6 +13,25 @@
 		</header> <!-- end article header -->
 	
 		<section class="post_content clearfix" itemprop="articleBody">
+			
+			<h1>WP-API</h1>
+			<div id="json-output"></div>
+			
+			<script id="content-template" type="text/template">
+			
+				<ul>
+				<% _.each( posts, function( post ){ post = post.attributes; %>
+					
+					<li>
+						<p>Title: <%= post.title.rendered %></p>
+						<p>Post Type: <%= post.type %></p>
+					</li>
+					
+				<% }); %>
+				</ul>
+
+			</script>
+			
 			<?php the_content(); ?>
 	
 		</section> <!-- end article section -->

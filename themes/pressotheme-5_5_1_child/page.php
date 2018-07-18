@@ -2,8 +2,8 @@
 
 <div class="row">
 	
-	<?php get_template_part( 'loop', 'author' ); ?>
-
+	<?php get_template_part( 'loop', 'page' ); ?>
+	
 	<?php get_sidebar(); // sidebar 1 ?>
 	
 </div>

@@ -2,7 +2,7 @@
 
 <div class="row">
 	
-	<?php get_template_part( 'loop', 'archive' ); ?>
+	<?php get_template_part( 'loop', 'index' ); ?>
 
 	<?php get_sidebar(); // sidebar 1 ?>
 	
