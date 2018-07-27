@@ -180,7 +180,7 @@ jQuery.noConflict();
         }
 
         //Detect page template part override
-        if (typeof template_part !== undefined) {
+        if (typeof template_part !== 'undefined') {
 
             if( template_part !== false ) {
                 template_part_name = `&template_part=${template_part}`;
