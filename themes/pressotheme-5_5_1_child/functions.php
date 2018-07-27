@@ -273,8 +273,8 @@ function prso_render_load_more_button( $args = array() ) {
 		'post_type'           => 'posts',
 		'force_button_render' => false,
 		'posts_per_page'      => get_option( 'posts_per_page' ),
-		'template_part'       => 'false',
-		'search'              => 'false',
+		'template_part'       => false,
+		'search'              => false,
 	);
 	$output   = null;
 
@@ -291,9 +291,16 @@ function prso_render_load_more_button( $args = array() ) {
 			<button class="load-more"
 					data-destination="<?php echo esc_html( $args['dom_destination'] ); ?>"
 					data-rest-endpoint="<?php echo esc_html( $args['endpoint'] ); ?>"
-					data-template-part="<?php echo esc_html( $args['template_part'] ); ?>"
-					data-search="<?php echo esc_html( $args['search'] ); ?>"
-					data-posts-per-page="<?php echo intval( $args['posts_per_page'] ); ?>">
+					data-posts-per-page="<?php echo intval( $args['posts_per_page'] ); ?>"
+
+					<?php if( false !== $args['template_part'] ): ?>
+						data-template-part="<?php echo esc_html( $args['template_part'] ); ?>"
+					<?php endif; ?>
+
+					<?php if( false !== $args['search'] ): ?>
+						data-search="<?php echo esc_html( $args['search'] ); ?>"
+					<?php endif; ?>
+			>
 				<?php _ex( 'View More', 'button text', PRSOTHEMEFRAMEWORK__DOMAIN ); ?>
 				<i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
 			</button>
