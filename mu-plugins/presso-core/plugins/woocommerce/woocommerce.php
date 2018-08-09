@@ -47,25 +47,21 @@ class Prso_Woocom {
 	 */
 	public static function is_product_archive() {
 
-		$products_rest_api_endpoint = '/wp-json/wc/v2/products';
-
 		if( is_admin() ) {
 			return false;
 		}
-		
-		$queried_object = get_queried_object();
 
-		if ( ! isset( $queried_object->ID ) && ! isset( $queried_object->term_id ) && ! isset( $queried_object->name ) ) {
-			return false;
-		}
-
-		if( !function_exists('is_shop') ) {
-			return false;
-		}
+		$products_rest_api_endpoint = '/wp-json/wc/v2/products';
 
 		//Is this a product rest api request
 		if ( isset( $_SERVER['REQUEST_URI'] ) && ( strpos( $_SERVER['REQUEST_URI'], $products_rest_api_endpoint ) !== false ) ) {
 			return true;
+		}
+
+		$queried_object = get_queried_object();
+
+		if ( ! isset( $queried_object->ID ) && ! isset( $queried_object->term_id ) && ! isset( $queried_object->name ) ) {
+			return false;
 		}
 
 		if ( is_shop() ) {

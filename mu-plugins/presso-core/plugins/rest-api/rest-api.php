@@ -180,6 +180,11 @@ class PrsoCustomRestApi {
 	 * @author Ben Moody
 	 */
 	public function restrict_external_rest_access( $result = null ) {
+		
+		if( defined('WP_DEBUG') && (true === WP_DEBUG) ) {
+			return true;
+		}
+		
 		if ( ! empty( $result ) ) {
 			return $result;
 		}
