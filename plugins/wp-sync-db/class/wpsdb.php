@@ -1261,10 +1261,16 @@ class WPSDB extends WPSDB_Base {
 		$last = strtolower( $val[ strlen( $val ) - 1 ] );
 		switch ( $last ) {
 		case 'g':
+			$val = str_replace( 'G', '', $val );
+			$val = str_replace( 'g', '', $val );
 			$val *= 1024;
 		case 'm':
+			$val = str_replace( 'M', '', $val );
+			$val = str_replace( 'm', '', $val );
 			$val *= 1024;
 		case 'k':
+			$val = str_replace( 'K', '', $val );
+			$val = str_replace( 'k', '', $val );
 			$val *= 1024;
 		}
 		return $val;
