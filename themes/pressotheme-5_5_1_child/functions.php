@@ -275,6 +275,7 @@ function prso_render_load_more_button( $args = array() ) {
 		'posts_per_page'      => get_option( 'posts_per_page' ),
 		'template_part'       => false,
 		'search'              => false,
+		'title'               => esc_html_x( 'View More', 'button text', PRSOTHEMEFRAMEWORK__DOMAIN ),
 	);
 	$output   = null;
 
@@ -301,7 +302,7 @@ function prso_render_load_more_button( $args = array() ) {
 						data-search="<?php echo esc_html( $args['search'] ); ?>"
 					<?php endif; ?>
 			>
-				<?php _ex( 'View More', 'button text', PRSOTHEMEFRAMEWORK__DOMAIN ); ?>
+				<?php echo esc_html( $args['title'] ); ?>
 				<i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
 			</button>
 		</div>
