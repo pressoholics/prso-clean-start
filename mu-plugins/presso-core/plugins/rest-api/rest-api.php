@@ -10,6 +10,8 @@
  * @author    Ben Moody
  */
 class PrsoCustomRestApi {
+	
+	public static $base_api_url = 'prso/v1';
 
 	function __construct() {
 

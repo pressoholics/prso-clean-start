@@ -74,6 +74,57 @@ function [REPLACE_NAME]_register_taxonomy() {
 }
 
 /**
+ * detect_custom_query_variable
+ *
+ * @CALLED BY /ACTION 'pre_get_posts'
+ *
+ * Detect taxonomy custom query variable in query, if found add tax_query
+ *     to the query object
+ *
+ * @access public
+ * @author Ben Moody
+ */
+//add_action( 'pre_get_posts', '[REPLACE_NAME]_detect_custom_query_variable' );
+function [REPLACE_NAME]_detect_custom_query_variable( $query ) {
+
+    //vars
+    $query_var = false;
+    $taxonomy_query     = false;
+    $query     = false;
+
+    //Do we have an audience query request
+    $query_var = $query->get( $this->query_var, false );
+
+    if ( false === $query_var ) {
+        return;
+    }
+
+    $query = array(
+        'taxonomy' => [REPLACE_NAME],
+        'field'    => 'term_id',
+        'terms'    => $query_var,
+    );
+
+    //Do we already have a taxonomy query arg
+    $taxonomy_query = $query->get( 'taxonomy', false );
+
+    if ( false === $taxonomy_query ) {
+
+        $taxonomy_query = array( 'relation' => 'AND' );
+
+        $taxonomy_query[] = $query;
+
+    } else {
+
+        $taxonomy_query[] = $query;
+
+    }
+
+    $query->set( 'tax_query', $taxonomy_query );
+
+}
+
+/**
 * After theme setup
 * 
 * Any actions you need to do for this custom post type after the theme
