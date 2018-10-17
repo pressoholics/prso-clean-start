@@ -363,5 +363,65 @@ jQuery.noConflict();
         });
 
     }
+    
+    /**
+     * geolocation
+     *
+     * Use this to handle any reqeusts to the custom geolocation rest api
+     *
+     * Note that when making rest api requests the use ip must be fetched from a 3rd party service first,
+     * then we make the rest api request to get the goelocation json, do with that what you will
+     *
+     * @access public
+     * @author Ben Moody
+     */
+    function geolocation() {
+        var user_ip = null;
+
+        if (typeof prsoThemeLocalVars.wp_api['geo'] === 'undefined') {
+            return;
+        }
+
+        //Get user IP
+        $.ajax({
+            url: 'https://api.ipify.org/?format=json',
+            method: 'GET',
+        }).done(function (response, status, xhr) {
+
+            if (typeof response.ip === 'undefined') {
+                return;
+            }
+
+            user_ip = response.ip;
+
+            //Try and get data from rest api
+            $.ajax({
+                url: prsoThemeLocalVars.wp_api['geo'] + '?ip=' + user_ip,
+                method: 'GET',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('X-WP-Nonce', prsoThemeLocalVars.wp_api.nonce);
+
+                    if (typeof beforeSendCallback !== 'undefined') {
+
+                        beforeSendCallback(args);
+
+                    }
+
+                },
+            }).done(function (response, status, xhr) {
+
+                if (typeof response.result === 'undefined') {
+                    return;
+                }
+
+            }).always(function () {
+
+
+
+            });
+
+        });
+
+    }
 	
 })(jQuery);

@@ -54,13 +54,19 @@ class PrsoGeolocate extends PrsoCustomRestApi {
 		//vars
 		$params   = array();
 		$response = null;
+		$user_ip = null;
 
 		if ( is_object( $data ) ) {
 			$params = $data->get_params();
 		}
 
+		//Has a user ip been provided
+		if( isset($params['ip']) ) {
+			$user_ip = sanitize_text_field( $params['ip'] );
+		}
+
 		//Get user location
-		$user_location = $this->get_user_location();
+		$user_location = $this->get_user_location( $user_ip );
 
 		/**
 		 * prso_geolocate__response
@@ -92,14 +98,16 @@ class PrsoGeolocate extends PrsoCustomRestApi {
 	 * @access private
 	 * @author Ben Moody
 	 */
-	private function get_user_location() {
+	private function get_user_location( $user_ip = null ) {
 
 		//vars
-		$user_ip_address                = null;
+		$user_ip_address                = $user_ip;
 		$geo_location_rest_api_endpoint = null;
 
 		//Get user IP address
-		$user_ip_address = self::get_user_ip();
+		if( empty($user_ip) ) {
+			$user_ip_address = self::get_user_ip();
+		}
 
 		/**
 		 * prso_geolocate__service_endpoint
@@ -122,11 +130,10 @@ class PrsoGeolocate extends PrsoCustomRestApi {
 		);
 
 		//Try and get cache
-		$found  = false;
-		$result = wp_cache_get( $cache['key'], $cache['group'], false, $found );
+		$result = wp_cache_get( $cache['key'], $cache['group'], false );
 
 		//Found cached result?
-		if ( false !== $found ) {
+		if ( false !== $result ) {
 			return $result;
 		}
 
@@ -164,24 +171,19 @@ class PrsoGeolocate extends PrsoCustomRestApi {
 
 		$user_ip_address = $_SERVER['REMOTE_ADDR'];
 
-		//If debug mode, local dev so get ip address remotely
-		if ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) {
+		$ip_response = wp_remote_get( 'https://api.ipify.org/?format=json' );
 
-			$ip_response = wp_remote_get( 'https://api.ipify.org/?format=json' );
+		if ( is_wp_error( $ip_response ) ) {
+			return $user_ip_address;
+		}
 
-			if ( is_wp_error( $ip_response ) ) {
-				return $user_ip_address;
-			}
+		if ( is_array( $ip_response ) ) {
 
-			if ( is_array( $ip_response ) ) {
+			$ip_response_body = json_decode( $ip_response['body'] );
 
-				$ip_response_body = json_decode( $ip_response['body'] );
+			if ( isset( $ip_response_body->ip ) ) {
 
-				if ( isset( $ip_response_body->ip ) ) {
-
-					$user_ip_address = sanitize_text_field( $ip_response_body->ip );
-
-				}
+				$user_ip_address = sanitize_text_field( $ip_response_body->ip );
 
 			}
 

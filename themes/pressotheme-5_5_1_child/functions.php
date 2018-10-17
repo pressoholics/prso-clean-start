@@ -169,6 +169,7 @@ function prso_theme_localize() {
 	$data_array['wp_api'] = array(
 		'posts'        => rest_url( 'wp/v2/posts' ),
 		'products'     => rest_url( 'wc/v2/products' ),
+		'geo'          => rest_url( 'prso/v1/geolocation' ),
 		'current_page' => get_query_var( 'paged' ),
 		'nonce'        => wp_create_nonce( 'wp_rest' ),
 		'filter'       => prso_get_queried_term_id(), //HEY!! make sure you hook into rest api get_items filter for any endpoint using filter['cat'] see Prso_Woocom_Rest_Api::woo_rest_product_query() for example
