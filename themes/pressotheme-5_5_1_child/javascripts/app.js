@@ -58,6 +58,9 @@ jQuery.noConflict();
 		//Load More
         //$('body').on('click', '.load-more', prso_load_more);
 		
+		//Geolocation
+		//geolocation();
+		
 		/*** Skrollr -- Parallax Effects ***/
 		/**
 		function init_skrollr() {
@@ -365,60 +368,117 @@ jQuery.noConflict();
     }
     
     /**
-     * geolocation
-     *
-     * Use this to handle any reqeusts to the custom geolocation rest api
-     *
-     * Note that when making rest api requests the use ip must be fetched from a 3rd party service first,
-     * then we make the rest api request to get the goelocation json, do with that what you will
-     *
-     * @access public
-     * @author Ben Moody
-     */
+    * geolocation
+    *
+    * Initates any geolocation actions, gets and stores user's IP address by default
+    *
+    * @access public
+    * @author Ben Moody
+    */
     function geolocation() {
-        var user_ip = null;
+
 
         if (typeof prsoThemeLocalVars.wp_api['geo'] === 'undefined') {
             return;
         }
 
-        //Get user IP
-        $.ajax({
-            url: 'https://api.ipify.org/?format=json',
-            method: 'GET',
-        }).done(function (response, status, xhr) {
+        //Get user IP -- callback function is optional, will store IP in global user_ip with or without callback
+        user_ip = getUserIP( getUserIP_callback );
 
-            if (typeof response.ip === 'undefined') {
-                return;
-            }
+    }
 
-            user_ip = response.ip;
+    /**
+    * getUserIP
+    *
+    * Gets user IP address from 3rd party (api.ipify.org) and caches it in a cookie
+     * Calling this fundtion wll set the IP address in the global var user_ip
+    *
+    * @access public
+    * @author Ben Moody
+    */
+    let user_ip = null;
+    function getUserIP( getUserIP_callback ) {
 
-            //Try and get data from rest api
+        //const
+        const cookie_name = 'prso_user_ip';
+
+        //vars
+        let user_ip_cache = null;
+
+        //first try and get user ip from cookie
+        user_ip_cache = $.cookie( cookie_name );
+
+        if (typeof user_ip_cache === 'undefined') {
+
+            //get user IP
             $.ajax({
-                url: prsoThemeLocalVars.wp_api['geo'] + '?ip=' + user_ip,
+                url: 'https://api.ipify.org/?format=json',
                 method: 'GET',
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader('X-WP-Nonce', prsoThemeLocalVars.wp_api.nonce);
-
-                    if (typeof beforeSendCallback !== 'undefined') {
-
-                        beforeSendCallback(args);
-
-                    }
-
-                },
             }).done(function (response, status, xhr) {
 
-                if (typeof response.result === 'undefined') {
+                if (typeof response.ip === 'undefined') {
                     return;
                 }
 
-            }).always(function () {
+                //Make user IP availble to all functions
+                user_ip = response.ip;
 
+                //Cache IP
+                $.cookie( cookie_name, user_ip, { expires: 365, path: '/' } );
 
+                //Trigger callback function
+                if (typeof getUserIP_callback !== 'undefined') {
+
+                    getUserIP_callback();
+
+                }
 
             });
+
+        } else {
+
+            //Make user IP availble to all functions
+            user_ip = user_ip_cache;
+
+            //Trigger callback function
+            if (typeof getUserIP_callback !== 'undefined') {
+
+                getUserIP_callback();
+
+            }
+
+        }
+
+    }
+
+    /**
+    * getUserIP_callback
+    *
+    * @CALLED BY getUserIP()
+    *
+    * This is the optional callback for getUserIP, makes a rest api request to custom endpoint to return data on users location
+    *
+    * @access public
+    * @author Ben Moody
+    */
+    function getUserIP_callback() {
+
+        //Try and get data from rest api
+        $.ajax({
+            url: prsoThemeLocalVars.wp_api['geo'] + '?ip=' + user_ip,
+            method: 'GET',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('X-WP-Nonce', prsoThemeLocalVars.wp_api.nonce);
+            },
+        }).done(function (response, status, xhr) {
+
+            if (typeof response === 'undefined') {
+                return;
+            }
+
+        }).always(function () {
+
+
 
         });
 
