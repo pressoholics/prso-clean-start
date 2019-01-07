@@ -19,6 +19,15 @@ Version: 5.5.1
 	 define( 'PRSOTHEMEFRAMEWORK__DOMAIN', 'prso-theme-domain' );
 	 load_theme_textdomain( PRSOTHEMEFRAMEWORK__DOMAIN, get_stylesheet_directory() . '/languages' );
  }
+ 
+ /**
+ * Disable XMLRPC
+ *
+ * @CALLED BY FILTER 'xmlrpc_enabled'
+ *
+ * @author Ben Moody
+ */
+add_filter( 'xmlrpc_enabled', '__return_false' );
 
 /**
 * ADD CUSTOM THEME FUNCTIONS HERE -----

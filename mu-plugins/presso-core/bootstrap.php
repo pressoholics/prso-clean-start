@@ -129,6 +129,7 @@
 		    'rest-api',
 		    'multilingual-press',
 		    'woocommerce',
+		    'wpcache',
 		);
  		
  		return $result;

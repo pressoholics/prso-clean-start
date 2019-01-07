@@ -7,6 +7,39 @@
  load_theme_textdomain( PRSOTHEMEFRAMEWORK__DOMAIN, get_stylesheet_directory() . '/languages' );
 
 /**
+* prso_set_cookie
+*
+* Helper to set a secure, httponly, samesite=strict cookie
+*
+* @param string $name - cookie name
+* @param string $value - cookie value
+* @param int $timestamp - expires timestamp in milliseconds
+* @access public
+* @author Ben Moody
+*/
+function prso_set_cookie( $name = null, $value = null, $timestamp = null ) {
+
+	//vars
+	$cookie_expires = null;
+
+	//If no timestamp provided default to session cookie
+	if( !empty($timestamp) ) {
+		$cookie_expires = date( 'D, d M Y H:i:s e', $timestamp );
+	}
+
+	$site_url = get_site_url();
+
+	//Remove http to get just domain
+	$find = array( 'http://', 'https://' );
+	$replace = '';
+	$site_domain = str_replace( $find, $replace, $site_url );
+
+	$cookie_header = 'Set-Cookie: '. esc_attr( $name ) .'='. esc_attr( $value ) .'; path=/; domain='. $site_domain .'; Expires='. $cookie_expires .'; HttpOnly; Secure; SameSite=Strict';
+
+	header( $cookie_header );
+}
+
+/**
 * ADD CUSTOM THEME FUNCTIONS HERE -----
 *
 */
