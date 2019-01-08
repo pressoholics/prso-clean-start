@@ -23,6 +23,140 @@ class PrsoMultilingualPress {
 	}
 
 	/**
+	 * get_post_language_switcher_data
+	 *
+	 * Helper to return array of all langauge switcher data for current post
+	 *
+	 * @param type name
+	 *
+	 * @var type name
+	 * @return type name
+	 * @access public static
+	 * @author Ben Moody
+	 */
+	public static function get_post_language_switcher_data( $post_id = 0 ) {
+
+		//vars
+		$output                   = array();
+		$post_translations        = null;
+		$post_translation_options = array();
+
+		//Manually provided post id?
+		if ( 0 !== $post_id ) {
+			$post_translation_options['content_id'] = intval( $post_id );
+		}
+
+		//Get post translations for current post
+		$post_translations = self::get_post_translations( $post_translation_options );
+
+		if ( ! is_array( $post_translations ) ) {
+			return $output;
+		}
+
+		foreach ( $post_translations as $translation ) {
+
+			if ( ! method_exists( $translation, 'language' ) ) {
+				continue;
+			}
+
+			$language_class = $translation->language();
+
+			$language_name = $language_class->name();
+
+			//Get url link to edit this post translation
+			$target_site_id    = $translation->remoteSiteId();
+			$target_post_id    = $translation->remoteContentId();
+			$target_post_url   = $translation->remoteUrl();
+			$target_post_title = null;
+			$is_archive        = false;
+
+			//Handle archive pages first
+			if ( is_post_type_archive() ) {
+
+				$post_type = get_queried_object();
+
+				if ( ! isset( $post_type->name ) ) {
+					continue;
+				}
+
+				//Switch to source blog and get post type archive link
+				switch_to_blog( $target_site_id );
+				$target_post_url = get_post_type_archive_link( $post_type->name );
+				restore_current_blog();
+
+				$target_post_title = $post_type->label;
+
+				$is_archive = true;
+
+			} elseif ( 0 === $target_post_id ) { //No translation for this post? skip it!
+				continue;
+			} else {
+				$target_post_title = get_the_title( $target_post_id );
+			}
+
+
+			$output[] = array(
+				'language'       => preg_replace( '/\([^)]+\)/', '', $language_name ),
+				'post_title'     => $target_post_title,
+				'post_permalink' => add_query_arg( 'noredirect', 'true', $target_post_url ),
+				'is_archive'     => $is_archive,
+			);
+
+		}
+
+		return $output;
+	}
+
+	/**
+	 * get_post_translations
+	 *
+	 * Helper to get instance of multilingual press plugin lanuage api class
+	 *
+	 * @return object WP_Error / mlp_language_api
+	 * @access public static
+	 * @author Ben Moody
+	 */
+	public static function get_post_translations( $mlp_args = array() ) {
+
+		//vars
+		global $post;
+		$defaults = array(
+			'site_id'       => get_current_blog_id(),
+			'content_id'    => $post->ID,
+			'type'          => 'post',
+			'filter_source' => true,
+		);
+
+		$mlp_args = wp_parse_args( $mlp_args, $defaults );
+
+		//Should we include the source language data?
+		if ( true === $mlp_args['filter_source'] ) {
+
+			$mlp_query_args = \Inpsyde\MultilingualPress\Framework\Api\TranslationSearchArgs::forContext( new \Inpsyde\MultilingualPress\Framework\WordpressContext() )
+			                                                                                ->forSiteId( $mlp_args['site_id'] )
+			                                                                                ->forContentId( $mlp_args['content_id'] )
+			                                                                                ->forType( $mlp_args['type'] )
+			                                                                                ->dontIncludeBase();
+
+		} else {
+
+			$mlp_query_args = \Inpsyde\MultilingualPress\Framework\Api\TranslationSearchArgs::forContext( new \Inpsyde\MultilingualPress\Framework\WordpressContext() )
+			                                                                                ->forSiteId( $mlp_args['site_id'] )
+			                                                                                ->forContentId( $mlp_args['content_id'] )
+			                                                                                ->forType( $mlp_args['type'] )
+			                                                                                ->includeBase();
+
+		}
+
+
+		$post_translations = \Inpsyde\MultilingualPress\resolve(
+			\Inpsyde\MultilingualPress\Framework\Api\Translations::class
+		)->searchTranslations( $mlp_query_args );
+
+		return $post_translations;
+	}
+
+	/**
 	 * admin_init
 	 *
 	 * @CALLED BY /ACTION 'admin_init'
@@ -34,7 +168,7 @@ class PrsoMultilingualPress {
 	 */
 	public function admin_init() {
 
-		if ( !defined('MULTILINGUALPRESS_LICENSE_API_URL') ) {
+		if ( ! defined( 'MULTILINGUALPRESS_LICENSE_API_URL' ) ) {
 			return;
 		}
 
@@ -43,28 +177,6 @@ class PrsoMultilingualPress {
 
 		//Setup list table column for post translation links
 		$this->setup_list_table_post_translations_columns();
-
-	}
-
-	/**
-	* render_admin_css
-	*
-	* @CALLED BY /ACTION 'admin_footer'
-	*
-	* Render little snippet of css to better style custom columns and interface
-	*
-	* @access public
-	* @author Ben Moody
-	*/
-	function render_admin_css() {
-
-		?>
-		<style type="text/css">
-			.fixed th.column-prso_multilingualpress {
-				width: 10em;
-			}
-		</style>
-		<?php
 
 	}
 
@@ -135,6 +247,28 @@ class PrsoMultilingualPress {
 	}
 
 	/**
+	 * render_admin_css
+	 *
+	 * @CALLED BY /ACTION 'admin_footer'
+	 *
+	 * Render little snippet of css to better style custom columns and interface
+	 *
+	 * @access public
+	 * @author Ben Moody
+	 */
+	function render_admin_css() {
+
+		?>
+		<style type="text/css">
+			.fixed th.column-prso_multilingualpress {
+				width: 10em;
+			}
+		</style>
+		<?php
+
+	}
+
+	/**
 	 * add_list_table_column
 	 *
 	 * @CALLED BY FILTER/ "manage_edit-{$screen_id}_columns"
@@ -195,14 +329,14 @@ class PrsoMultilingualPress {
 
 		$post_translations = self::get_post_translations( $mlp_args );
 
-		if ( !is_array( $post_translations ) ) {
+		if ( ! is_array( $post_translations ) ) {
 			return;
 		}
 
 		//Build list of links to edit translations
 		foreach ( $post_translations as $translation ) {
 
-			if( !method_exists($translation, 'language') ) {
+			if ( ! method_exists( $translation, 'language' ) ) {
 				continue;
 			}
 
@@ -215,7 +349,7 @@ class PrsoMultilingualPress {
 			$target_post_id = $translation->remoteContentId();
 
 			//No translation for this post? skip it!
-			if( 0 === $target_post_id ) {
+			if ( 0 === $target_post_id ) {
 				continue;
 			}
 
@@ -237,56 +371,6 @@ class PrsoMultilingualPress {
 		echo $output;
 
 		return;
-	}
-
-	/**
-	 * get_post_translations
-	 *
-	 * Helper to get instance of multilingual press plugin lanuage api class
-	 *
-	 * @return object WP_Error / mlp_language_api
-	 * @access public static
-	 * @author Ben Moody
-	 */
-	public static function get_post_translations( $mlp_args = array() ) {
-
-		//vars
-		global $post;
-		$defaults = array(
-			'site_id'    => get_current_blog_id(),
-			'content_id' => $post->ID,
-			'type'       => 'post',
-			'filter_source' => true,
-		);
-
-		$mlp_args = wp_parse_args( $mlp_args, $defaults );
-
-		//Should we include the source language data?
-		if( true === $mlp_args['filter_source'] ) {
-
-			$mlp_query_args = \Inpsyde\MultilingualPress\Framework\Api\TranslationSearchArgs::forContext(new \Inpsyde\MultilingualPress\Framework\WordpressContext())
-			                                                                                ->forSiteId( $mlp_args['site_id'] )
-			                                                                                ->forContentId( $mlp_args['content_id'] )
-			                                                                                ->forType($mlp_args['type'])
-			                                                                                ->dontIncludeBase();
-
-		} else {
-
-			$mlp_query_args = \Inpsyde\MultilingualPress\Framework\Api\TranslationSearchArgs::forContext(new \Inpsyde\MultilingualPress\Framework\WordpressContext())
-			                                                                                ->forSiteId( $mlp_args['site_id'] )
-			                                                                                ->forContentId( $mlp_args['content_id'] )
-			                                                                                ->forType($mlp_args['type'])
-			                                                                                ->includeBase();
-
-		}
-
-
-
-		$post_translations = \Inpsyde\MultilingualPress\resolve(
-			\Inpsyde\MultilingualPress\Framework\Api\Translations::class
-		)->searchTranslations($mlp_query_args);
-
-		return $post_translations;
 	}
 
 }
