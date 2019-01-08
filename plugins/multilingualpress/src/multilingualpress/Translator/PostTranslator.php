@@ -194,7 +194,7 @@ final class PostTranslator implements Translator
      */
     private function publicUrl(int $postId): string
     {
-        $this->fixPostBase($postId);
+        //$this->fixPostBase($postId);
 
         $url = get_permalink($postId);
         if (is_wp_error($url)) {
