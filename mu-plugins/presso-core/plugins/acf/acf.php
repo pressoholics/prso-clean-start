@@ -4,6 +4,8 @@ class Prso_Acf {
 	public function __construct() {
 
 		//$this->load_blocks();
+		
+		//$this->load_block_templates();
 
 		//Add custom block category
 		//add_filter( 'block_categories', array( $this, 'blocks_catergories' ), 10, 1 );
@@ -17,6 +19,16 @@ class Prso_Acf {
 
 		//Vars
 		$cpt_path = dirname( __FILE__ ) . '/blocks';
+
+		//Include files
+		prso_include_all_files( $cpt_path );
+
+	}
+	
+	public function load_block_templates() {
+
+		//Vars
+		$cpt_path = dirname( __FILE__ ) . '/block-templates';
 
 		//Include files
 		prso_include_all_files( $cpt_path );
@@ -64,7 +76,7 @@ class Prso_Acf {
 	 * @access public
 	 * @author Ben Moody
 	 */
-	function jam3_blocks_allowed_block_types( $allowed_blocks ) {
+	function blocks_allowed_block_types( $allowed_blocks ) {
 
 		$allowed_blocks = array(
 			//Core blocks
@@ -75,7 +87,7 @@ class Prso_Acf {
 			'core/image',
 
 			//Project blocks
-			'gcc-blocks',
+			'acf/project-block-name-here',
 		);
 
 		/**
