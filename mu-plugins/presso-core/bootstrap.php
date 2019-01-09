@@ -130,6 +130,7 @@
 		    'multilingual-press',
 		    'woocommerce',
 		    'wpcache',
+		    'acf',
 		);
  		
  		return $result;
