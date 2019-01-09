@@ -66,7 +66,7 @@ class PrsoMultilingualPress {
 			//Get url link to edit this post translation
 			$target_site_id    = $translation->remoteSiteId();
 			$target_post_id    = $translation->remoteContentId();
-			$target_post_url   = $translation->remoteUrl();
+			$target_post_url   = null;
 			$target_post_title = null;
 			$is_archive        = false;
 
@@ -81,8 +81,8 @@ class PrsoMultilingualPress {
 
 				//Switch to source blog and get post type archive link
 				switch_to_blog( $target_site_id );
+
 				$target_post_url = get_post_type_archive_link( $post_type->name );
-				restore_current_blog();
 
 				$target_post_title = $post_type->label;
 
@@ -91,9 +91,17 @@ class PrsoMultilingualPress {
 			} elseif ( 0 === $target_post_id ) { //No translation for this post? skip it!
 				continue;
 			} else {
+
+				//Switch to source blog and get post type archive link
+				switch_to_blog( $target_site_id );
+
 				$target_post_title = get_the_title( $target_post_id );
+
+				$target_post_url = get_post_permalink( $target_post_id );
+
 			}
 
+			restore_current_blog();
 
 			$output[] = array(
 				'language'       => preg_replace( '/\([^)]+\)/', '', $language_name ),
