@@ -128,12 +128,30 @@ class PrsoMultilingualPress {
 
 		//vars
 		global $post;
+
 		$defaults = array(
 			'site_id'       => get_current_blog_id(),
-			'content_id'    => $post->ID,
 			'type'          => 'post',
 			'filter_source' => true,
 		);
+
+		//Maybe fallback to current post if no post is specified
+		if( !isset( $mlp_args['content_id'] ) ) {
+
+			if( is_object( $post ) && isset( $post->ID ) ) {
+
+				$defaults['content_id'] = $post->ID;
+
+			} else {
+				//No valid post object
+				return new WP_Error(
+					'get_post_translations',
+					'Global post is not valid post object',
+					$post
+				);
+			}
+
+		}
 
 		$mlp_args = wp_parse_args( $mlp_args, $defaults );
 

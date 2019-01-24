@@ -65,8 +65,24 @@ class PrsoGeolocate extends PrsoCustomRestApi {
 			$user_ip = sanitize_text_field( $params['ip'] );
 		}
 
-		//Get user location
-		$user_location = $this->get_user_location( $user_ip );
+		//Has a user location object been provided
+		if( isset($params['location']) ) {
+			$user_location = json_decode( $params['location'] );
+		} else {
+
+			//Get user location
+			$user_location = $this->get_user_location( $user_ip );
+
+		}
+		
+		//Cache user locale in cookie via JS front end
+		if( is_object($user_location) && isset($user_location->countryCode) ) {
+			
+			$response['geo_data']['locale'] = array(
+				'countryCode' => esc_attr( $user_location->countryCode ),
+			);
+			
+		}
 
 		/**
 		 * prso_geolocate__response

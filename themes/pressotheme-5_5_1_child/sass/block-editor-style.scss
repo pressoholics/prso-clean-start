@@ -1,0 +1,29 @@
+div.editor-styles-wrapper {
+
+  // Global Foundation Settings
+  @import "settings";
+  //@import "foundation";
+
+  // Or selectively include components
+   @import
+     "foundation/components/panels",
+     "foundation/components/type";
+
+  // Pressoholics Framework Core
+  @import "_mixins.scss";
+
+  // Theme specific sass
+  @import "theme_styles/_typography.scss";
+
+  /* Block - Content
+  ---------------------------------------------------------------------- */
+  ul.gcc-featured-posts {
+    list-style: none !important;
+
+    li {
+      @include rem(font-size, 13px);
+    }
+
+  }
+
+}

@@ -463,9 +463,21 @@ jQuery.noConflict();
     */
     function getUserIP_callback() {
 
+		//vars
+        const cookie_name = 'prso_user_locale';
+		let user_locale = '';
+        let user_locale_cache = '';
+
+		//Shoud we pass users locale cached in cookie?
+        user_locale_cache = $.cookie( cookie_name );
+
+        if (typeof user_locale_cache !== 'undefined') {
+            user_locale = '&location=' + user_locale_cache;
+        }
+
         //Try and get data from rest api
         $.ajax({
-            url: prsoThemeLocalVars.wp_api['geo'] + '?ip=' + user_ip,
+            url: prsoThemeLocalVars.wp_api['geo'] + '?ip=' + user_ip + user_locale,
             method: 'GET',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('X-WP-Nonce', prsoThemeLocalVars.wp_api.nonce);
@@ -474,6 +486,14 @@ jQuery.noConflict();
 
             if (typeof response === 'undefined') {
                 return;
+            }
+            
+            //Cache user location in cookie
+            if (typeof response.geo_data.locale !== 'undefined') {
+
+                //Cache IP
+                $.cookie( cookie_name, JSON.stringify( response.geo_data.locale ), { expires: 365, path: '/' } );
+
             }
 
         }).always(function () {

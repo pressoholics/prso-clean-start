@@ -365,6 +365,22 @@ function prso_tiny_mce_editor_styles() {
 
 }
 
+/**
+ * Enqueue supplemental block editor styles.
+ */
+add_action( 'enqueue_block_editor_assets', 'prso_editor_frame_styles' );
+function prso_editor_frame_styles() {
+
+	wp_enqueue_style(
+		'prso-editor-frame-styles',
+		get_theme_file_uri( 'block-editor-style.css' ),
+		false,
+		'1.0',
+		'all'
+	);
+
+}
+
 add_action('init', 'disable_embeds_init', 9999);
 function disable_embeds_init() {
 
@@ -437,4 +453,23 @@ function prso_pre_get_posts( $query ) {
 	$query->set( 'post_per_page', get_option( 'posts_per_page' ) );
 	$query->set( 'post_status', 'publish' );
 
+}
+
+/**
+* prso_is_gutenberg_editor_request
+*
+* Helper to return result of static method Prso_Acf::is_gutenberg_request()
+*
+* @return bool
+* @access public
+* @author Ben Moody
+*/
+function prso_is_gutenberg_editor_request() {
+	
+	if( !method_exists('Prso_Acf', 'is_gutenberg_request') ) {
+		return false;
+	}
+	
+	return Prso_Acf::is_gutenberg_request();
+	
 }

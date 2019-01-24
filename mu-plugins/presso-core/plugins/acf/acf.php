@@ -101,6 +101,41 @@ class Prso_Acf {
 
 		return $allowed_blocks;
 	}
+	
+	/**
+	 * is_gutenberg_request
+	 *
+	 * Helper to detect if current request is from the Gutenberg editor
+	 *
+	 * @access public static
+	 * @author Ben Moody
+	 */
+	public static function is_gutenberg_request() {
+
+		global $pagenow;
+
+		if ( isset( $pagenow ) && ( 'post-new.php' === $pagenow ) ) {
+			return true;
+		}
+
+		if ( isset( $_REQUEST['_locale'] ) ) {
+			return true;
+		}
+
+		if ( isset( $_REQUEST['action'] ) && ( 'edit' === $_REQUEST['action'] ) ) {
+			return true;
+		}
+		
+		if ( isset( $_REQUEST['action'] ) && ( 'acf/ajax/render_block_preview' === $_REQUEST['action'] ) ) {
+			return true;
+		}
+
+		if ( isset( $_REQUEST['context'] ) && ( 'edit' === $_REQUEST['context'] ) ) {
+			return true;
+		}
+
+		return false;
+	}
 
 }
 new Prso_Acf();
