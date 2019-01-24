@@ -134,6 +134,14 @@ class PrsoMultilingualPress {
 			'type'          => 'post',
 			'filter_source' => true,
 		);
+		
+		if( !class_exists('\Inpsyde\MultilingualPress\Framework\Api\TranslationSearchArgs') ) {
+			//No valid post object
+			return new WP_Error(
+				'get_post_translations',
+				'MultilingualPress not installed'
+			);
+		}
 
 		//Maybe fallback to current post if no post is specified
 		if( !isset( $mlp_args['content_id'] ) ) {
